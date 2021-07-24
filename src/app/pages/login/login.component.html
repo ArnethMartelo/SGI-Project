@@ -1,0 +1,56 @@
+<div class="login-container" [ngStyle]="backgroundStyle">
+  <div class="login-form">
+    <div class="login-form-content">
+      <h2>Iniciar Sesión</h2>
+      <mat-card-content class="container">
+        <form #form="ngForm" (ngSubmit)="onLogin(form)">
+          <mat-form-field appearance="outline">
+            <mat-label>Correo electrónico</mat-label>
+            <input
+              matInput
+              type="email"
+              name="email"
+              placeholder="ejemplo@correo.com"
+              [ngModel]="user.email"
+              #email="ngModel"
+              required
+              email
+            />
+            <mat-error *ngIf="email.invalid">Campo invalido</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input
+              matInput
+              type="password"
+              name="password"
+              placeholder="+8 caracteres"
+              [ngModel]="user.password"
+              #password="ngModel"
+              required
+            />
+            <mat-error *ngIf="password.invalid">Campo invalido</mat-error>
+
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <a href="#">Olvidé mi contraseña</a>
+
+          <div class="login-form-button">
+            <button type="submit" mat-raised-button color="primary">
+              Iniciar Sesión
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </div>
+  </div>
+</div>

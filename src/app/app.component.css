@@ -1,0 +1,24 @@
+main {
+  width: 100%;
+  min-height: 100vh;
+  /* border: 2px solid yellow; */
+}
+
+mat-sidenav {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3f51b5;
+  /* border: 2px solid pink; */
+}
+
+mat-sidenav-content {
+  background: #f9fbfb;
+  /* border: 2px solid orange; */
+}
+
+mat-sidenav-container {
+  height: 100vh;
+  /* border: 2px solid orange; */
+}

@@ -1,0 +1,11 @@
+<main>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" position="end"> Menu</mat-sidenav>
+    <app-sidebar></app-sidebar>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+      <app-header (toggleSidenav)="sidenav.toggle()"></app-header>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <app-footer></app-footer>
+</main>

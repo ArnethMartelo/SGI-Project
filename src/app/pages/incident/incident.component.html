@@ -1,0 +1,371 @@
+<div class="accordion-container">
+  <!-- <form #iForm="ngForm" (ngSubmit)="onAddIncident(iForm)"   class="accordion-container"> -->
+  <mat-accordion class="accordion-container-align">
+    <mat-expansion-panel
+      [expanded]="step === 0"
+      (opened)="setStep(0)"
+      hideToggle
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          I. IDENTIFICACIÓN GENERAL DEL EMPLEADOR
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon>business</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <section class="empleador-section">
+        <div class="section-align">
+          <label class="section-margin">Tipo de vinculador laboral:</label>
+
+          <mat-radio-group [(ngModel)]="labelPosition">
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="empleador"
+              >Empleador</mat-radio-button
+            >
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="contratante"
+              >Contratante</mat-radio-button
+            >
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="cooperativa"
+              >Cooperativa</mat-radio-button
+            >
+          </mat-radio-group>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre o razón social</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>NIT</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefóno</mat-label>
+          <input matInput required />
+        </mat-form-field>
+      </section>
+      <mat-action-row>
+        <button mat-button color="primary" (click)="nextStep()">
+          Siguiente
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel
+      [expanded]="step === 1"
+      (opened)="setStep(1)"
+      hideToggle
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          II. INFORMACIÓN DE LA PERSONA QUE SE ACCIDENTÓ
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon>sick</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <section class="sick-section">
+        <div class="section-align">
+          <label class="section-margin">Tipo de vinculación laboral:</label>
+
+          <mat-radio-group [(ngModel)]="labelPosition">
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="planta"
+              >Planta</mat-radio-button
+            >
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="contratatista"
+              >Contratista</mat-radio-button
+            >
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="aprendiz"
+              >Aprendiz</mat-radio-button
+            >
+          </mat-radio-group>
+        </div>
+
+        <div class="container-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Primer apellido</mat-label>
+            <input matInput required />
+          </mat-form-field>
+
+          <div class="spacer"></div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Segundo apellido</mat-label>
+            <input matInput />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de documento</mat-label>
+          <mat-select [formControl]="idTypeControl" required>
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let idType of idTypes" [value]="idType.value">
+              {{ idType.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="idTypeControl.hasError('required')"
+            >Necesitamos tu documento para continuar</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Número de documento</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput required />
+        </mat-form-field>
+        <div class="container-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Telefóno</mat-label>
+            <input matInput required />
+          </mat-form-field>
+
+          <div class="spacer"></div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cargo</mat-label>
+            <input matInput required />
+          </mat-form-field>
+        </div>
+      </section>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Atrás</button>
+        <button mat-button color="primary" (click)="nextStep()">
+          Siguiente
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel
+      [expanded]="step === 2"
+      (opened)="setStep(2)"
+      hideToggle
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title> III. INFORMACION DEL ACCIDENTE </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon>info</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <section class="info-section">
+        <div class="section-align">
+          <label class="section-margin">Lugar del accidente:</label>
+
+          <mat-radio-group [(ngModel)]="labelPosition">
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="empresa"
+              >Empresa</mat-radio-button
+            >
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="calle"
+              >Calle</mat-radio-button
+            >
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="casa"
+              >Casa</mat-radio-button
+            >
+          </mat-radio-group>
+        </div>
+
+        <div class="container-group">
+          <div class="container-subgroup">
+            <mat-form-field class="datepicker" appearance="outline">
+              <mat-label>Fecha del incidente</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                (focus)="picker.open()"
+                readonly
+              />
+            </mat-form-field>
+            <mat-datepicker #picker></mat-datepicker>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo de incidente</mat-label>
+              <mat-select>
+                <mat-option
+                  *ngFor="let incidentType of incidentTypes"
+                  [value]="incidentType.value"
+                >
+                  {{ incidentType.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="spacer"></div>
+
+          <div class="timepicker">
+            <mat-label>Hora del accidente</mat-label>
+            <ngb-timepicker
+              [(ngModel)]="time"
+              [meridian]="meridian"
+            ></ngb-timepicker>
+          </div>
+        </div>
+        <div class="section-align">
+          <label class="section-margin">¿Causó la muerte a empleado?:</label>
+
+          <mat-radio-group [(ngModel)]="labelPosition">
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="empleador"
+              >SI</mat-radio-button
+            >
+            <mat-radio-button
+              class="section-margin"
+              color="primary"
+              value="contratante"
+              >NO</mat-radio-button
+            >
+          </mat-radio-group>
+        </div>
+
+        <mat-form-field class="description-full-width" appearance="outline">
+          <mat-label
+            >DESCRIBA DETALLADAMENTE EL ACCIDENTE. QUÉ LO ORIGINÓ O CAUSÓ
+            (Responda a las preguntas qué paso, cuándo, dónde, cómo y por
+            qué)</mat-label
+          >
+          <textarea matInput placeholder="Su descripción aquí..."></textarea>
+        </mat-form-field>
+      </section>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Atrás</button>
+        <button mat-button color="primary" (click)="nextStep()">
+          Siguiente
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel
+      [expanded]="step === 3"
+      (opened)="setStep(3)"
+      hideToggle
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          IV. INFORMACIÓN DE LA PERSONA RESPONSABLE DEL INFORME
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon>account_circle</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <section class="user-section">
+        <div class="container-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Primer apellido</mat-label>
+            <input matInput required />
+          </mat-form-field>
+
+          <div class="spacer"></div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Segundo apellido</mat-label>
+            <input matInput />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de documento</mat-label>
+          <mat-select [formControl]="idTypeControl" required>
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let idType of idTypes" [value]="idType.value">
+              {{ idType.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="idTypeControl.hasError('required')"
+            >Necesitamos tu documento para continuar</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Número de documento</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <div class="container-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Telefóno</mat-label>
+            <input matInput required />
+          </mat-form-field>
+
+          <div class="spacer"></div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cargo</mat-label>
+            <input matInput required />
+          </mat-form-field>
+        </div>
+      </section>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Atrás</button>
+        <button mat-button color="primary" type="submit" (click)="nextStep()">
+          Finalizar
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <!-- </form> -->
+</div>
