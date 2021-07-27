@@ -1,23 +1,20 @@
 .login-container {
   width: 100%;
-  margin-top: 80px;
   min-height: 100vh;
   background-repeat: no-repeat;
   background-size: auto 90vh;
   background-position: right;
   background-color: #f9fbfb;
+  /* border: solid 2px red; */
 }
 
 .login-container .login-form-content {
-  position: absolute;
+  position: relative;
   width: 450px;
-  top: 25vh;
+  top: 15vh;
   left: 16vh;
 }
 
-.container {
-  padding-top: 5vh;
-}
 .container .mat-form-field {
   display: block;
   width: 100%;
@@ -47,4 +44,9 @@ h1 {
 
 h2 {
   font-size: 32px;
+}
+
+mat-form-field {
+  background-color: #f9fbfb;
+  border-radius: 5px;
 }

@@ -1,3 +1,3 @@
-export default {
-  jwtSecret: 'BDPEK@'
-};
+// export default {
+//   jwtSecret: 'BDPEK@'
+// };

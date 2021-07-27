@@ -1,65 +1,91 @@
+import { Router } from '@angular/router';
 import { environment } from './../../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserI } from '../../models/user.interface';
-import { JwtResponseI } from '../../models/jwt-response';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { UserI, UserResponseI, Roles } from '../../models/user.interface';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
+const helper = new JwtHelperService();
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  AUTH_SERVER: string = environment.API_URL;
-  private authSubject = new BehaviorSubject<boolean> (false);
-  private token: string | null = '';
-  constructor(private httpClient: HttpClient) {}
+  private loggedIn = new BehaviorSubject<boolean>(false);
+  private role = new BehaviorSubject<Roles>(null);
 
-  get isLogged(): Observable<boolean>{
-    return this.authSubject.asObservable();
+  constructor(private http: HttpClient, private router: Router) {
+    this.getToken();
   }
 
-  register(user: UserI): Observable<JwtResponseI> {
-    return this.httpClient
-      .post<JwtResponseI>(`${this.AUTH_SERVER}/register`, user)
-      .pipe(
-        tap((res: JwtResponseI) => {
-          if (res) {
-            // guardar token
-            this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
-          }
-        })
-      );
+  get isLogged(): Observable<boolean> {
+    return this.loggedIn.asObservable();
   }
 
-  login(user: UserI): Observable<JwtResponseI> {
-    return this.httpClient
-      .post<JwtResponseI>(`${this.AUTH_SERVER}/login`, user)
+  get isAdmin$(): Observable <Roles>{
+    return this.role.asObservable();
+  }
+
+  // register(authData: UserI): Observable<UserResponseI> {
+  //   return this.http
+  //     .post<UserResponseI>(`${environment.API_URL}/api/signup`, authData)
+  //     .pipe(
+  //       tap((res: UserResponseI) => {
+  //         if (res) {
+  //           // guardar token
+  //           this.saveLocalStorage(res);
+  //         }
+  //       })
+  //     );
+  // }
+
+  login(authData: UserI): Observable<UserResponseI | void> {
+    return this.http
+      .post<UserResponseI>(`${environment.API_URL}/api/signin`, authData)
       .pipe(
-        tap((res: JwtResponseI) => {
+        map((res: UserResponseI) => {
           if (res) {
             // guardar token
-            this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
+            this.saveLocalStorage(res);
+            this.loggedIn.next(true);
+            this.role.next(res.role);
           }
-        })
+          return res;
+        }),
+        catchError((e) => this.handlerError(e))
       );
   }
 
   logout(): void {
-    this.token = '';
-    localStorage.removeItem('ACCESS_TOKEN');
-    localStorage.removeItem('EXPIRES_IN');
+    localStorage.removeItem('user');
+    this.loggedIn.next(false);
+    this.router.navigateByUrl('');
   }
 
-  private saveToken(token: string, expiresIn: string): void {
-    localStorage.setItem('ACCESS_TOKEN', token);
-    localStorage.setItem('EXPIRES_IN', expiresIn);
-    this.token = token;
+  private saveLocalStorage(user: UserResponseI): void {
+    const { userId, message, ...rest } = user;
+    localStorage.setItem('user', JSON.stringify(rest));
   }
 
-  private getToken(): string | null {
-    if (!this.token) {
-      this.token = localStorage.getItem('ACCESS_TOKEN');
+  private getToken(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}' ) ;
+    if (user) {
+      const isExpired = helper.isTokenExpired(user.token);
+      if (isExpired) {
+        this.logout();
+      } else {
+        this.loggedIn.next(true);
+        this.role.next(user.role);
+      }
     }
-    return this.token;
+  }
+
+  private handlerError(e: any): Observable<never> {
+    let errorMessage = 'An error occurred retrienving data';
+    if (e) {
+      errorMessage = `Error: code ${e.message}`;
+    }
+    window.alert(errorMessage);
+    return throwError(errorMessage);
   }
 }

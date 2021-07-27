@@ -1,8 +1,7 @@
-export type Roles = 'EMPLOYEE' | 'ADMIN';
+export type Roles = 'EMPLOYEE' | 'ADMIN' | null;
 
 export interface UserI {
   username: string;
-  email: string;
   password: string;
 }
 
@@ -11,4 +10,5 @@ export interface UserResponseI {
   token: string;
   userId: number;
   role: Roles;
+  expiresIn: string;
 }

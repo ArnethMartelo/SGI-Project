@@ -1,1 +1,56 @@
-<p>sidebar works!</p>
+<mat-accordion>
+  <mat-expansion-panel  hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Usuarios </mat-panel-title>
+      <mat-panel-description>
+        <mat-icon>account_circle</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-nav-list class="users">
+      <a mat-list-item>
+        <mat-icon>add_circle</mat-icon>
+        <span class="nav-link">Crear Usuario</span>
+      </a>
+      <a mat-list-item>
+        <mat-icon>inventory</mat-icon>
+        <span class="nav-link">Listar Usuarios</span>
+      </a>
+      <a mat-list-item>
+        <mat-icon>update</mat-icon>
+        <span class="nav-link">Actualizar Usuario</span>
+      </a>
+      <a mat-list-item>
+        <mat-icon>delete</mat-icon>
+        <span class="nav-link">Borrar Usuario</span>
+      </a>
+    </mat-nav-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel  hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Incidentes </mat-panel-title>
+      <mat-panel-description>
+        <mat-icon>warning</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-nav-list class="incidents">
+      <a mat-list-item>
+        <mat-icon>add_circle</mat-icon>
+        <span class="nav-link">Crear Incidente</span>
+      </a>
+      <a mat-list-item>
+        <mat-icon>list</mat-icon>
+        <span class="nav-link">Listar Incidentes</span>
+      </a>
+      <a mat-list-item>
+        <mat-icon>update</mat-icon>
+        <span class="nav-link">Actualizar Incidente</span>
+      </a>
+      <a mat-list-item>
+        <mat-icon>delete</mat-icon>
+        <span class="nav-link">Borrar Incidente</span>
+      </a>
+    </mat-nav-list>
+  </mat-expansion-panel>
+
+</mat-accordion>

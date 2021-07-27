@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const initMongoServer = require("./backend/config/connection");
-const router = require("./backend/routes/user.routes");
+const userRoute = require("./backend/routes/user.routes");
 
 //inicializations
 const app = express();
@@ -19,10 +19,12 @@ app.use(
 //statics files
 
 //routes
-app.use("/api", router);
+
 app.get("/", (req, res) => {
   res.json({ message: "API is Working" });
 });
+
+app.use("/api", userRoute);
 
 //Settings
 const PORT = process.env.PORT || 3000;

@@ -12,10 +12,11 @@ exports.createUser = async (req, res) => {
     });
   }
 
-  const { name, email, password } = req.body;
+  const { username, password, role } = req.body;
+
   try {
     let user = await User.findOne({
-      email,
+      username,
     });
     if (user) {
       return res.status(400).json({
@@ -24,9 +25,9 @@ exports.createUser = async (req, res) => {
     }
 
     user = new User({
-      name,
-      email,
+      username,
       password,
+      role,
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -68,10 +69,11 @@ exports.loginUser = async (req, res) => {
     });
   }
 
-  const { email, password } = req.body;
+  const { username, password } = req.body;
+
   try {
     let user = await User.findOne({
-      email,
+      username,
     });
     if (!user)
       return res.status(400).json({
@@ -96,12 +98,7 @@ exports.loginUser = async (req, res) => {
       {
         expiresIn: 3600,
       },
-      (err, token) => {
-        if (err) throw err;
-        res.status(200).json({
-          token,
-        });
-      }
+      res.status(200).json(user)
     );
   } catch (e) {
     console.error(e);

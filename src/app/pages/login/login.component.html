@@ -1,56 +1,61 @@
 <div class="login-container" [ngStyle]="backgroundStyle">
-  <div class="login-form">
-    <div class="login-form-content">
-      <h2>Iniciar Sesión</h2>
-      <mat-card-content class="container">
-        <form #form="ngForm" (ngSubmit)="onLogin(form)">
-          <mat-form-field appearance="outline">
-            <mat-label>Correo electrónico</mat-label>
-            <input
-              matInput
-              type="email"
-              name="email"
-              placeholder="ejemplo@correo.com"
-              [ngModel]="user.email"
-              #email="ngModel"
-              required
-              email
-            />
-            <mat-error *ngIf="email.invalid">Campo invalido</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Contraseña</mat-label>
-            <input
-              matInput
-              type="password"
-              name="password"
-              placeholder="+8 caracteres"
-              [ngModel]="user.password"
-              #password="ngModel"
-              required
-            />
-            <mat-error *ngIf="password.invalid">Campo invalido</mat-error>
+  <div class="login-form-content">
+    <h2>Iniciar Sesión</h2>
+    <mat-card-content class="container">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <mat-form-field appearance="outline">
+          <mat-label>Correo electrónico</mat-label>
+          <input
+            matInput
+            formControlName="username"
+            type="email"
+            name="username"
+            placeholder="ejemplo@correo.com"
+            required
+          />
+          <mat-error *ngIf="isValidField('username')">{{
+            getErrorMessage("username")
+          }}</mat-error>
+        </mat-form-field>
 
-            <button
-              mat-icon-button
-              matSuffix
-              (click)="hide = !hide"
-              [attr.aria-label]="'Hide password'"
-              [attr.aria-pressed]="hide"
-            >
-              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-            </button>
-          </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            formControlName="password"
+            name="password"
+            placeholder="+8 caracteres"
+            required
+          />
+          <mat-error *ngIf="isValidField('password')">{{
+            getErrorMessage("password")
+          }}</mat-error>
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </mat-form-field>
 
-          <a href="#">Olvidé mi contraseña</a>
+        <a href="#">Olvidé mi contraseña</a>
 
-          <div class="login-form-button">
-            <button type="submit" mat-raised-button color="primary">
-              Iniciar Sesión
-            </button>
-          </div>
-        </form>
-      </mat-card-content>
-    </div>
+        <div class="login-form-button">
+          <button
+            [disabled]="loginForm.invalid"
+            type="submit"
+            mat-raised-button
+            color="primary"
+          >
+            Iniciar Sesión
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
   </div>
 </div>

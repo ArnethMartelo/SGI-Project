@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers: [AuthService],
 })
 export class HomeComponent implements OnInit {
   constructor(public authService: AuthService) {}

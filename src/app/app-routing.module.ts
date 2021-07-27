@@ -24,7 +24,7 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () =>
       import('./pages/login/login.module').then((m) => m.LoginModule),
-      canActivate: [CheckLoginGuard],
+    canActivate: [CheckLoginGuard],
   },
   {
     path: 'incident',

@@ -1,11 +1,13 @@
-<main>
-  <mat-sidenav-container>
-    <mat-sidenav #sidenav mode="side" position="end"> Menu</mat-sidenav>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="push" position="start">
+    <mat-toolbar>
+      <mat-icon>settings</mat-icon>
+      Settings</mat-toolbar>
     <app-sidebar></app-sidebar>
-    <mat-sidenav-content>
-      <router-outlet></router-outlet>
-      <app-header (toggleSidenav)="sidenav.toggle()"></app-header>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-  <app-footer></app-footer>
-</main>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+    <app-header (toggleSidenav)="sidenav.toggle()"></app-header>
+  </mat-sidenav-content>
+</mat-sidenav-container>

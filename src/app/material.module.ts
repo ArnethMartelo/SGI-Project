@@ -42,8 +42,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { MatTreeModule } from '@angular/material/tree';
 
 const myModules: any = [
   A11yModule,
@@ -86,13 +86,13 @@ const myModules: any = [
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatTreeModule,
   OverlayModule,
   PortalModule,
   ScrollingModule,
   MatFormFieldModule,
   FormsModule,
   ReactiveFormsModule,
+  MatTreeModule,
 ];
 
 @NgModule({
