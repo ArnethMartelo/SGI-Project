@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   hide = true;
 
   loginForm = this.fb.group({
-    username: [
+    email: [
       '',
       [Validators.required, Validators.pattern(this.isValidEmail)],
     ],

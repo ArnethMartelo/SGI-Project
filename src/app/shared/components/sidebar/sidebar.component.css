@@ -1,0 +1,11 @@
+mat-expansion-panel-header {
+  display: flex;
+  justify-content: space-between;
+  /* border: 2px solid blue; */
+}
+
+mat-icon {
+  display: flex;
+  justify-content: center;
+  /* border: 2px solid red; */
+}

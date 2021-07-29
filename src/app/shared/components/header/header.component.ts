@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
+  ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,13 +16,14 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-
-  isAdmin:string|null = null;
+  isAdmin: string | null = null;
   isLogged: boolean = false;
 
   private destroy$ = new Subject<any>();
 
   @Output() toggleSidenav = new EventEmitter<void>();
+
+  @ViewChild('setting', { static: true }) setting: any;
 
   constructor(private authService: AuthService) {}
 

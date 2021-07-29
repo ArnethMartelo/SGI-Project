@@ -1,13 +1,12 @@
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="push" position="start">
-    <mat-toolbar>
-      <mat-icon>settings</mat-icon>
-      Settings</mat-toolbar>
+  <mat-sidenav #sidenav mode="side">
+    <mat-toolbar> Settings</mat-toolbar>
     <app-sidebar></app-sidebar>
   </mat-sidenav>
 
   <mat-sidenav-content>
     <router-outlet></router-outlet>
     <app-header (toggleSidenav)="sidenav.toggle()"></app-header>
+    <app-footer></app-footer>
   </mat-sidenav-content>
 </mat-sidenav-container>

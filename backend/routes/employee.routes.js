@@ -1,9 +1,7 @@
 // import {
 //   checkRole
 // } from '../middlewares/role';
-// import {
-//   checkJwt
-// } from '../middlewares/jwt';
+
 // import {
 //   UserController
 // } from './../controller/UserController';
@@ -13,11 +11,10 @@
 
 // const router = Router();
 
-// // Get all users
-// router.get('/', UserController.getAll);
+
 
 // // Get one user
-// router.get('/:id', [checkJwt, checkRole(['admin'])], UserController.getById);
+//
 
 // // Create a new user
 // router.post('/', [checkJwt, checkRole(['admin'])], UserController.new);

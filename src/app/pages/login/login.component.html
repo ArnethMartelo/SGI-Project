@@ -7,14 +7,14 @@
           <mat-label>Correo electrónico</mat-label>
           <input
             matInput
-            formControlName="username"
+            formControlName="email"
             type="email"
-            name="username"
+            name="email"
             placeholder="ejemplo@correo.com"
             required
           />
-          <mat-error *ngIf="isValidField('username')">{{
-            getErrorMessage("username")
+          <mat-error *ngIf="isValidField('email')">{{
+            getErrorMessage("email")
           }}</mat-error>
         </mat-form-field>
 

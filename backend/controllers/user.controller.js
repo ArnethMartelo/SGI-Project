@@ -1,9 +1,38 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const SECRET_KEY = "../config/config";
 const { validationResult } = require("express-validator");
+const _ = require("underscore");
 
+//get all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    let from = req.query.from || 0;
+    from = Number(from);
+
+    let limit = req.query.limit || 5;
+    limit = Number(limit);
+
+    const conditions = {
+      status: true,
+    };
+
+    const users = await User.find(
+      conditions,
+      "name lastName email position role status"
+    )
+      .skip(from)
+      .limit(limit);
+
+    const sumUsers = await User.countDocuments(conditions);
+    res.status(200).json({ users, sumUsers });
+  } catch (e) {
+    console.log(e.message);
+    res.status(400).send("Error listing users");
+  }
+};
+
+//Create user
 exports.createUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -12,11 +41,24 @@ exports.createUser = async (req, res) => {
     });
   }
 
-  const { username, password, role } = req.body;
+  const {
+    name,
+    lastName,
+    idType,
+    idNumber,
+    phoneNumber,
+    address,
+    position,
+    status,
+    img,
+    email,
+    password,
+    role,
+  } = req.body;
 
   try {
-    let user = await User.findOne({
-      username,
+    const user = await User.findOne({
+      email,
     });
     if (user) {
       return res.status(400).json({
@@ -25,11 +67,19 @@ exports.createUser = async (req, res) => {
     }
 
     user = new User({
-      username,
+      name,
+      lastName,
+      idType,
+      idNumber,
+      phoneNumber,
+      address,
+      position,
+      status,
+      img,
+      email,
       password,
       role,
     });
-
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
 
@@ -40,7 +90,6 @@ exports.createUser = async (req, res) => {
         id: user.id,
       },
     };
-
     jwt.sign(
       payload,
       "randomString",
@@ -54,12 +103,63 @@ exports.createUser = async (req, res) => {
         });
       }
     );
-  } catch (err) {
-    console.log(err.message);
+  } catch (e) {
+    console.log(e.message);
     res.status(500).send("Error in Saving");
   }
 };
 
+//edit user
+exports.editUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = _.pick(req.body, [
+      "name",
+      "lastName",
+      "idType",
+      "idNumber",
+      "address",
+      "phoneNumber",
+      "position",
+      "password",
+      "role",
+      "email",
+      "img",
+      "status",
+    ]);
+    const userBD = await User.findByIdAndUpdate(id, user, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({ userBD });
+  } catch (e) {
+    console.log(e.message);
+    res.status(400).send("Error updating user");
+  }
+};
+
+//Delete user
+exports.deleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userBD = await User.findByIdAndUpdate(
+      id,
+      { status: false },
+      { new: true }
+    );
+    if (!userBD) {
+      res.status(400).json({
+        message: "User not found",
+      });
+    }
+    res.status(200).json({ userBD });
+  } catch (e) {
+    console.log(e.message);
+    res.status(400).send("Error deleting user");
+  }
+};
+
+//Login user
 exports.loginUser = async (req, res) => {
   const errors = validationResult(req);
 
@@ -69,12 +169,13 @@ exports.loginUser = async (req, res) => {
     });
   }
 
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({
-      username,
+    const user = await User.findOne({
+      email,
     });
+
     if (!user)
       return res.status(400).json({
         message: "User Not Exist",
@@ -98,10 +199,16 @@ exports.loginUser = async (req, res) => {
       {
         expiresIn: 3600,
       },
-      res.status(200).json(user)
+      (err, token) => {
+        if (err) throw err;
+        res.status(200).json({
+          token: token,
+          role: user.role,
+        });
+      }
     );
   } catch (e) {
-    console.error(e);
+    console.error(e.message);
     res.status(500).json({
       message: "Server Error",
     });
