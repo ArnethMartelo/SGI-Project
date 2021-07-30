@@ -6,6 +6,7 @@ const initMongoServer = async () => {
     await mongoose.connect(mongoDB.URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
     });
     console.log(`Mongo connected on ${mongoDB.URI}`);
   } catch (e) {

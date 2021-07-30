@@ -1,5 +1,5 @@
 module.exports = {
   mongoDB: {
-    URI: 'mongodb://localhost:27017/OHS'
+    URI: 'mongodb://localhost:27017/SGI'
   }
 }

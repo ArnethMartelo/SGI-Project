@@ -4,43 +4,14 @@ const bcrypt = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const _ = require("underscore");
 
-//get all users
-exports.getAllUsers = async (req, res) => {
-  try {
-    let from = req.query.from || 0;
-    from = Number(from);
-
-    let limit = req.query.limit || 5;
-    limit = Number(limit);
-
-    const conditions = {
-      status: true,
-    };
-
-    const users = await User.find(
-      conditions,
-      "name lastName email position role status"
-    )
-      .skip(from)
-      .limit(limit);
-
-    const sumUsers = await User.countDocuments(conditions);
-    res.status(200).json({ users, sumUsers });
-  } catch (e) {
-    console.log(e.message);
-    res.status(400).send("Error listing users");
-  }
-};
-
 //Create user
-exports.createUser = async (req, res) => {
+exports.create = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
       errors: errors.array(),
     });
   }
-
   const {
     name,
     lastName,
@@ -55,9 +26,8 @@ exports.createUser = async (req, res) => {
     password,
     role,
   } = req.body;
-
   try {
-    const user = await User.findOne({
+    let user = await User.findOne({
       email,
     });
     if (user) {
@@ -65,7 +35,6 @@ exports.createUser = async (req, res) => {
         msg: "User Already Exists",
       });
     }
-
     user = new User({
       name,
       lastName,
@@ -109,8 +78,51 @@ exports.createUser = async (req, res) => {
   }
 };
 
-//edit user
-exports.editUser = async (req, res) => {
+//Get all users
+exports.list = async (req, res) => {
+  try {
+    let from = req.query.from || 0;
+    from = Number(from);
+
+    let limit = req.query.limit || 5;
+    limit = Number(limit);
+
+    const conditions = {
+      status: true,
+    };
+
+    const users = await User.find(
+      conditions,
+      "name lastName email position role status"
+    )
+      .skip(from)
+      .limit(limit);
+
+    const sumUsers = await User.countDocuments(conditions);
+    res.status(200).json({ users, sumUsers });
+  } catch (e) {
+    console.log(e.message);
+    res.status(400).send("Error listing users");
+  }
+};
+
+//Search user
+exports.search = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+
+    res.status(200).json({
+      message: "User found",
+      user,
+    });
+  } catch (e) {
+    console.log(e.message);
+    res.status(404).json({ message: "user not found" });
+  }
+};
+
+//Update user
+exports.update = async (req, res) => {
   try {
     const id = req.params.id;
     const user = _.pick(req.body, [
@@ -139,7 +151,7 @@ exports.editUser = async (req, res) => {
 };
 
 //Delete user
-exports.deleteUser = async (req, res) => {
+exports.delete = async (req, res) => {
   try {
     const id = req.params.id;
     const userBD = await User.findByIdAndUpdate(
@@ -160,7 +172,7 @@ exports.deleteUser = async (req, res) => {
 };
 
 //Login user
-exports.loginUser = async (req, res) => {
+exports.login = async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {

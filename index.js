@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const initMongoServer = require("./backend/config/connection");
 const userRoute = require("./backend/routes/user.routes");
+const incidentRoute = require('./backend/routes/incident.routes')
 
 //inicializations
 const app = express();
@@ -25,6 +26,14 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", userRoute);
+app.use("/api", incidentRoute);
+
+// Handle 404 - Keep this as a last route
+app.use((req, res, next) =>{
+    res.status(404);
+    res.send('404: File Not Found');
+    next();
+});
 
 //Settings
 const PORT = process.env.PORT || 3000;

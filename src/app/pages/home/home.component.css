@@ -1,1 +1,31 @@
+.container {
+  width: 100%;
+  /* margin:auto; */
+  margin-top: 20px;
+  min-height: 90vh;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 70% 80vh;
+  background-position: right;
+  background-color: #f9fbfb;
+  /* border: solid 2px red; */
+  overflow: hidden;
+}
+.title-container{
+  display: flex;
+  flex-direction: column;
+  row-gap: 40px;
+  margin-top: 70px;
+}
+h1{
 
+  font-size: 56px;
+}
+h2{
+font-size: 24px;
+}
+p{
+  font-size: 72px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
