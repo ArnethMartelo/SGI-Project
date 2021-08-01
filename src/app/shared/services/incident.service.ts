@@ -1,28 +1,29 @@
-import { IncidentI } from './../models/incident.interface';
-import { Injectable } from '@angular/core';
+import { ObjectId } from 'mongoose';
+import { IncidentI } from '@models/incident.interface';
+import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
+import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class IncidentService {
-  url = 'http://localhost:3000/api/incidents';
+  url = `${environment.API_URL}/incident`;
   incidents: IncidentI[] = [];
-  incidentUpdated = new Subject<IncidentI[]>();
+  incidentBD = new Subject<IncidentI[]>();
 
   constructor(private http: HttpClient) {}
 
   addIncident(incident: IncidentI) {
-    this.http;
     this.http
       .post<{ idIncidentAdded: string }>(this.url, incident)
       .subscribe((response) => {
         console.log(response);
         this.incidents.push(incident);
         incident.id = response.idIncidentAdded;
-        this.incidentUpdated.next([...this.incidents]);
+        this.incidentBD.next([...this.incidents]);
       });
   }
 
@@ -40,6 +41,8 @@ export class IncidentService {
               type: string;
               description: string;
               deadly: boolean;
+              victim: ObjectId;
+              informer: ObjectId;
             }) => {
               return {
                 id: incident._id,
@@ -49,6 +52,8 @@ export class IncidentService {
                 type: incident.type,
                 description: incident.description,
                 deadly: incident.deadly,
+                victim: incident.victim,
+                informer: incident.informer,
               };
             }
           );
@@ -56,7 +61,7 @@ export class IncidentService {
       )
       .subscribe((dataTransformed) => {
         this.incidents = dataTransformed;
-        this.incidentUpdated.next([...this.incidents]);
+        this.incidentBD.next([...this.incidents]);
       });
   }
 
@@ -66,11 +71,11 @@ export class IncidentService {
         (incident) => incident.id !== id
       );
       this.incidents = updatedIncident;
-      this.incidentUpdated.next([...this.incidents]);
+      this.incidentBD.next([...this.incidents]);
     });
   }
 
   getIncidentsUpdateListener() {
-    return this.incidentUpdated.asObservable();
+    return this.incidentBD.asObservable();
   }
 }

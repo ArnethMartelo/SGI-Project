@@ -1,13 +1,12 @@
 mat-toolbar {
   overflow: hidden;
-  position: fixed;
+  position: absolute;
   top: 0;
-  left: 0;
+  /* left: 0; */
   width: 100%;
   height: 60px;
   background-color: #f9fbfb;
   box-shadow: 0 6px 6px -6px #3f51b5;
-  transition: 0.5s;
   /* border: 2px solid red; */
 }
 .spacer {
@@ -16,8 +15,4 @@ mat-toolbar {
 a {
   text-decoration: none;
 }
-:host {
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
+

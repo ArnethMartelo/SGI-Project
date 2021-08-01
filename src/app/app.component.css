@@ -5,19 +5,20 @@ mat-sidevan-container {
 }
 mat-sidenav {
   width: 20%;
-  margin-top: 60px;
+  /* margin-top: 60px; */
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
   /* border: 2px solid pink; */
 }
 mat-toolbar {
+  height: 60px;
   background-color: #f2f2f2;
-  box-shadow: 0 6px 6px -6px #3f51b5;
+
 }
 
 mat-sidenav-content {

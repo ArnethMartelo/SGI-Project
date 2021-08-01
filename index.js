@@ -1,8 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const initMongoServer = require("./backend/config/connection");
+const authRoute = require("./backend/routes/auth.routes");
 const userRoute = require("./backend/routes/user.routes");
 const incidentRoute = require('./backend/routes/incident.routes')
+
 
 //inicializations
 const app = express();
@@ -25,6 +27,7 @@ app.get("/", (req, res) => {
   res.json({ message: "API is Working" });
 });
 
+app.use("/api", authRoute);
 app.use("/api", userRoute);
 app.use("/api", incidentRoute);
 

@@ -1,3 +1,5 @@
+import { UtilsService } from './../../services/utils.service';
+import { AuthService } from './../../services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthService, private utilsService: UtilsService) { }
 
   ngOnInit(): void {
+  }
+
+  onExit(){
+    this.authService.logout();
+    this.utilsService.opensidebar(false);
   }
 
 }

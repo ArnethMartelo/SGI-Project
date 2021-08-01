@@ -5,17 +5,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { A11yModule } from '@angular/cdk/a11y';
-import { ClipboardModule } from '@angular/cdk/clipboard';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { PortalModule } from '@angular/cdk/portal';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { CdkStepperModule } from '@angular/cdk/stepper';
-import { CdkTableModule } from '@angular/cdk/table';
-import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -42,16 +33,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { OverlayModule } from '@angular/cdk/overlay';
 import { MatTreeModule } from '@angular/material/tree';
 
 const myModules: any = [
-  A11yModule,
-  ClipboardModule,
-  CdkStepperModule,
-  CdkTableModule,
-  CdkTreeModule,
-  DragDropModule,
   MatAutocompleteModule,
   MatBadgeModule,
   MatBottomSheetModule,
@@ -86,12 +70,7 @@ const myModules: any = [
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  OverlayModule,
-  PortalModule,
-  ScrollingModule,
   MatFormFieldModule,
-  FormsModule,
-  ReactiveFormsModule,
   MatTreeModule,
 ];
 

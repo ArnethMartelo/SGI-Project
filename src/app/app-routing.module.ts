@@ -1,4 +1,4 @@
-import { CheckLoginGuard } from './shared/guards/check-login.guard';
+import { CheckLoginGuard } from '@shared/guards/check-login.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 

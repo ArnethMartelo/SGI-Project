@@ -2,7 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from './../../shared/services/auth/auth.service';
+import { AuthService } from '@shared/services/auth/auth.service';
 import { IMAGES_ROUTES } from '../../data/constants/routes/images.routes';
 import { Subject } from 'rxjs';
 
@@ -22,10 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   hide = true;
 
   loginForm = this.fb.group({
-    email: [
-      '',
-      [Validators.required, Validators.pattern(this.isValidEmail)],
-    ],
+    email: ['', [Validators.required, Validators.pattern(this.isValidEmail)]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
   constructor(

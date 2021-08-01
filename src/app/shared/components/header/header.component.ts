@@ -20,15 +20,15 @@ import {
 } from 'rxjs/operators';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
-enum VisibilityState {
-  Visible = 'visible',
-  Hidden = 'hidden',
-}
+// enum VisibilityState {
+//   Visible = 'visible',
+//   Hidden = 'hidden',
+// }
 
-enum Direction {
-  Up = 'Up',
-  Down = 'Down',
-}
+// enum Direction {
+//   Up = 'Up',
+//   Down = 'Down',
+// }
 
 @Component({
   selector: 'app-header',
@@ -57,10 +57,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @Output() toggleSidenav = new EventEmitter<void>();
 
-  @HostBinding('@toggle')
-  get toggle(): VisibilityState {
-    return this.isVisible ? VisibilityState.Visible : VisibilityState.Hidden;
-  }
+  // @HostBinding('@toggle')
+  // get toggle(): VisibilityState {
+  //   return this.isVisible ? VisibilityState.Visible : VisibilityState.Hidden;
+  // }
 
   constructor(private authService: AuthService) {}
 

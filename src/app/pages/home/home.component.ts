@@ -1,5 +1,5 @@
 import { IMAGES_ROUTES } from 'src/app/data/constants/routes/images.routes';
-import { AuthService } from './../../shared/services/auth/auth.service';
+import { AuthService } from '@shared/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

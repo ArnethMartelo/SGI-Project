@@ -241,7 +241,7 @@
           <div class="timepicker">
             <mat-label>Hora del accidente</mat-label>
             <ngb-timepicker
-              [(ngModel)]="time"
+              ngModel="time"
               [meridian]="meridian"
             ></ngb-timepicker>
           </div>
@@ -249,7 +249,7 @@
         <div class="section-align">
           <label class="section-margin">¿Causó la muerte a empleado?:</label>
 
-          <mat-radio-group [(ngModel)]="labelPosition">
+          <mat-radio-group ngModel="labelPosition">
             <mat-radio-button
               class="section-margin"
               color="primary"

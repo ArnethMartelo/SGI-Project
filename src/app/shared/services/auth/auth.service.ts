@@ -1,10 +1,10 @@
 import { Router } from '@angular/router';
-import { environment } from './../../../../environments/environment';
+import { environment } from '@environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserI, UserResponseI, Roles } from '../../models/user.interface';
+import { UserI, UserResponseI, Roles } from '@models/user.interface';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 const helper = new JwtHelperService();
@@ -13,6 +13,7 @@ const helper = new JwtHelperService();
 export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   private role = new BehaviorSubject<Roles>(null);
+  private userToken = new BehaviorSubject<string>('');
 
   constructor(private http: HttpClient, private router: Router) {
     this.getToken();
@@ -22,18 +23,22 @@ export class AuthService {
     return this.loggedIn.asObservable();
   }
 
-  get isAdmin$(): Observable <Roles>{
+  get isAdmin$(): Observable<Roles> {
     return this.role.asObservable();
+  }
+
+  get userTokenValue(): string {
+    return this.userToken.getValue();
   }
 
   // register(authData: UserI): Observable<UserResponseI> {
   //   return this.http
-  //     .post<UserResponseI>(`${environment.API_URL}/api/signup`, authData)
+  //     .post<UserResponseI>(`${environment.API_URL}/signup`, authData)
   //     .pipe(
-  //       tap((res: UserResponseI) => {
+  //       map((res: UserResponseI) => {
   //         if (res) {
   //           // guardar token
-  //           this.saveLocalStorage(res);
+  //           this.saveStorage(res);
   //         }
   //       })
   //     );
@@ -41,16 +46,15 @@ export class AuthService {
 
   login(authData: UserI): Observable<UserResponseI | void> {
     return this.http
-      .post<UserResponseI>(`${environment.API_URL}/api/signin`, authData)
+      .post<UserResponseI>(`${environment.API_URL}/signin`, authData)
       .pipe(
-        map((res: UserResponseI) => {
-          if (res) {
-            // guardar token
-            this.saveLocalStorage(res);
-            this.loggedIn.next(true);
-            this.role.next(res.role);
-          }
-          return res;
+        map((user: UserResponseI) => {
+          this.saveStorage(user);
+          this.loggedIn.next(true);
+          this.role.next(user.role);
+          this.userToken.next(user.token);
+
+          return user;
         }),
         catchError((e) => this.handlerError(e))
       );
@@ -60,16 +64,17 @@ export class AuthService {
     localStorage.removeItem('user');
     this.loggedIn.next(false);
     this.role.next(null);
+    this.userToken.next('');
     this.router.navigateByUrl('');
   }
 
-  private saveLocalStorage(user: UserResponseI): void {
+  private saveStorage(user: UserResponseI): void {
     const { userId, message, ...rest } = user;
     localStorage.setItem('user', JSON.stringify(rest));
   }
 
   private getToken(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}' ) ;
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user) {
       const isExpired = helper.isTokenExpired(user.token);
       if (isExpired) {
@@ -77,6 +82,7 @@ export class AuthService {
       } else {
         this.loggedIn.next(true);
         this.role.next(user.role);
+        this.userToken.next(user.token);
       }
     }
   }

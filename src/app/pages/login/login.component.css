@@ -1,5 +1,7 @@
 .login-container {
   width: 100%;
+  display: flex;
+  align-items: center;
   min-height: 100vh;
   background-repeat: no-repeat;
   background-size: 80% 80vh;
@@ -10,10 +12,12 @@
 }
 
 .login-container .login-form-content {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+
   width: 450px;
-  top: 15vh;
-  left: 16vh;
+
+  margin-left: 16vh;
 }
 
 .container .mat-form-field {

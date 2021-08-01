@@ -1,5 +1,5 @@
-import { IncidentService } from './../../shared/services/incident.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { IncidentService } from '@shared/services/incident.service';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 
 interface IdType {

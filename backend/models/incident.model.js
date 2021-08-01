@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-const employee = require("./user.model");
+const employee = require("./employee.model");
 const Schema = mongoose.Schema;
 const incidentSchema = new Schema(
   {
