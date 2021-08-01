@@ -13,10 +13,10 @@ export class AdminInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
     if (req.url.includes('user')) {
-      const authToken = this.authService.userTokenValue;
+      const userValue = this.authService.userValue;
       const authReq = req.clone({
         setHeaders: {
-          authorization: authToken,
+          authorization: userValue.token,
         },
       });
       return next.handle(authReq);

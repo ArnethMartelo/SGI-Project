@@ -1,3 +1,4 @@
+import { UserResponseI } from '@models/user.interface';
 import { AuthService } from './../../services/auth/auth.service';
 import {
   Component,
@@ -18,7 +19,13 @@ import {
   takeUntil,
   throttleTime,
 } from 'rxjs/operators';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 // enum VisibilityState {
 //   Visible = 'visible',
@@ -87,13 +94,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
-    this.authService.isLogged
+    // this.authService.isLogged
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((res) => (this.isLogged = res));
+    this.authService.user$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((res) => (this.isLogged = res));
+      .subscribe((user: UserResponseI) => {
+        this.isLogged = true;
+        this.isAdmin= user?.role;
+      });
 
-    this.authService.isAdmin$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((res) => (this.isAdmin = res));
+    // this.authService.isAdmin$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((user) => (this.isAdmin = res));
   }
 
   ngOnDestroy(): void {

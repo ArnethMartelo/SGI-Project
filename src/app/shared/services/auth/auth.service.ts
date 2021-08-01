@@ -11,25 +11,35 @@ const helper = new JwtHelperService();
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private loggedIn = new BehaviorSubject<boolean>(false);
-  private role = new BehaviorSubject<Roles>(null);
-  private userToken = new BehaviorSubject<string>('');
+  // private loggedIn = new BehaviorSubject<boolean>(false);
+  // private role = new BehaviorSubject<Roles>(null);
+  // private userToken = new BehaviorSubject<string>('');
+
+  private user = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient, private router: Router) {
     this.getToken();
   }
 
-  get isLogged(): Observable<boolean> {
-    return this.loggedIn.asObservable();
+  get user$(): Observable<UserResponseI> {
+    return this.user.asObservable();
   }
 
-  get isAdmin$(): Observable<Roles> {
-    return this.role.asObservable();
+  get userValue(): UserResponseI {
+    return this.user.getValue();
   }
 
-  get userTokenValue(): string {
-    return this.userToken.getValue();
-  }
+  // get isLogged(): Observable<boolean> {
+  //   return this.loggedIn.asObservable();
+  // }
+
+  // get isAdmin$(): Observable<Roles> {
+  //   return this.role.asObservable();
+  // }
+
+  // get userTokenValue(): string {
+  //   return this.userToken.getValue();
+  // }
 
   // register(authData: UserI): Observable<UserResponseI> {
   //   return this.http
@@ -50,10 +60,10 @@ export class AuthService {
       .pipe(
         map((user: UserResponseI) => {
           this.saveStorage(user);
-          this.loggedIn.next(true);
-          this.role.next(user.role);
-          this.userToken.next(user.token);
-
+          this.user.next(user);
+          // this.loggedIn.next(true);
+          // this.role.next(user.role);
+          // this.userToken.next(user.token);
           return user;
         }),
         catchError((e) => this.handlerError(e))
@@ -62,9 +72,10 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('user');
-    this.loggedIn.next(false);
-    this.role.next(null);
-    this.userToken.next('');
+    this.user.next(null);
+    // this.loggedIn.next(false);
+    // this.role.next(null);
+    // this.userToken.next('');
     this.router.navigateByUrl('');
   }
 
@@ -80,9 +91,10 @@ export class AuthService {
       if (isExpired) {
         this.logout();
       } else {
-        this.loggedIn.next(true);
-        this.role.next(user.role);
-        this.userToken.next(user.token);
+        this.user.next(user);
+        // this.loggedIn.next(true);
+        // this.role.next(user.role);
+        // this.userToken.next(user.token);
       }
     }
   }
