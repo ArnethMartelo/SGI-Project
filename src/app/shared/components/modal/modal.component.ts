@@ -14,6 +14,7 @@ enum Action {
   styleUrls: ['./modal.component.css'],
 })
 export class ModalComponent implements OnInit {
+
   actionTODO = Action.CREATE;
   showPasswordField = true;
   hide = true;
@@ -25,9 +26,10 @@ export class ModalComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data?.user.hasOwnProperty('_id')) {
+
       this.actionTODO = Action.EDIT;
       this.data.title = 'Actualizar usuario';
-      this.data.icon = 'manage_accounts'
+      this.data.icon = 'manage_accounts';
       this.showPasswordField = false;
       this.userForm.baseForm.get('password')?.setValidators(null);
       this.userForm.baseForm.updateValueAndValidity();
@@ -36,6 +38,7 @@ export class ModalComponent implements OnInit {
   }
 
   onSave() {
+
     const formValue = this.userForm.baseForm.value;
     if (this.actionTODO === Action.CREATE) {
       this.userService.create(formValue).subscribe((res) => {

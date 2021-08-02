@@ -2,7 +2,7 @@
   <div class="login-form-content">
     <h2>Iniciar Sesión</h2>
     <mat-card-content class="container">
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <form [formGroup]="loginForm.baseForm" (ngSubmit)="onLogin()">
         <mat-form-field appearance="outline">
           <mat-label>Correo electrónico</mat-label>
           <input
@@ -13,7 +13,7 @@
             placeholder="ejemplo@correo.com"
             required
           />
-          <mat-error *ngIf="isValidField('email')">{{
+          <mat-error *ngIf="checkField('email')">{{
             getErrorMessage("email")
           }}</mat-error>
         </mat-form-field>
@@ -28,7 +28,7 @@
             placeholder="+8 caracteres"
             required
           />
-          <mat-error *ngIf="isValidField('password')">{{
+          <mat-error *ngIf="checkField('password')">{{
             getErrorMessage("password")
           }}</mat-error>
           <button
@@ -47,7 +47,7 @@
 
         <div class="login-form-button">
           <button
-            [disabled]="loginForm.invalid"
+            [disabled]="loginForm.baseForm.invalid"
             type="submit"
             mat-raised-button
             color="primary"

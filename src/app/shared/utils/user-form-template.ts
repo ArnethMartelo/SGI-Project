@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 @Injectable({ providedIn: 'root' })
 export class UserFormTemplate {
   private isValidEmail = /\S+@\S+\.\S+/;
- 
+
   constructor(private fb: FormBuilder) {}
 
   baseForm = this.fb.group({
@@ -40,14 +40,3 @@ export class UserFormTemplate {
   }
 }
 
-//const { errors } = this.baseForm.get(field);
-// if (errors) {
-//   const minlength = errors?.minlength?.requiredLength
-//   const messages = {
-//     required:'Nesecitamos este dato para continuar',
-//     pattern:'Correo inválido',
-//     minlength:'Este campo requiere mínimo 8 caracteres'
-//   }
-//   const errorKey = Object.keys(errors).find(Boolean)||{};
-//   this.errorMessage = messages[errorKey];
-//}

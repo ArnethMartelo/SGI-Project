@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { ModalComponent } from './../../../shared/components/modal/modal.component';
+import { ModalComponent } from '@shared/components/modal/modal.component';
 import { UsersService } from '@shared/services/users.service';
 import { AfterViewInit, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
+import { UserFormTemplate } from '@app/shared/utils/user-form-template';
 
 @Component({
   selector: 'app-users',
@@ -37,7 +38,11 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
-  constructor(private usersService: UsersService, private dialog: MatDialog) {}
+  constructor(
+    private usersService: UsersService,
+    private dialog: MatDialog,
+    public userForm: UserFormTemplate
+  ) {}
 
   ngOnInit(): void {
     this.usersService.list().subscribe((users) => {
@@ -56,17 +61,18 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
         .delete(userId)
         .pipe(takeUntil(this.destroy$))
         .subscribe((res) => {
-          window.alert(res.message);
+          window.alert('Usuario Eliminado');
         });
     }
   }
 
   openDialog(user = {}): void {
-    const dialogRef = this.dialog.open(ModalComponent, {
+    this.userForm.baseForm.reset();
+    this.dialog.open(ModalComponent, {
       width: '40vw',
       height: '90vh',
       hasBackdrop: false,
-      data: { title: 'Nuevo Usuario',icon: 'person_add_alt', user },
+      data: { title: 'Nuevo Usuario', icon: 'person_add_alt', user },
     });
   }
 

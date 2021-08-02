@@ -1,6 +1,6 @@
 <div class="container">
   <div class="mat-dialog-title-container">
-    <mat-icon>{{data?.icon}}</mat-icon>
+    <mat-icon>{{ data?.icon }}</mat-icon>
     <h2 mat-dialog-title>
       {{ data?.title }}
     </h2>
@@ -130,16 +130,16 @@
               placeholder="+8 caracteres"
               required
             />
-             <button
-            type="button"
-            mat-icon-button
-            matSuffix
-            (click)="hide = !hide"
-            [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hide"
-          >
-            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-          </button>
+            <button
+              type="button"
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
             <mat-error *ngIf="checkField('password')">{{
               userForm.getErrorMessage("password")
             }}</mat-error>
