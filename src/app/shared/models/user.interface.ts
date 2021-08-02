@@ -8,7 +8,7 @@ export interface UserI {
 export interface UserResponseI {
   message: string;
   token: string;
-  userId: number;
+  userId: string;
   role: Roles;
   expiresIn: string;
 }

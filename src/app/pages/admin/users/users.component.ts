@@ -50,7 +50,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.paginator = this.paginator;
   }
 
-  onDelete(userId: number): void {
+  onDelete(userId: string): void {
     if (window.confirm('¿Seguro quieres eliminar este usuario?')) {
       this.usersService
         .delete(userId)
@@ -66,7 +66,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       width: '40vw',
       height: '90vh',
       hasBackdrop: false,
-      data: { title: 'Nuevo Usuario', user },
+      data: { title: 'Nuevo Usuario',icon: 'person_add_alt', user },
     });
   }
 

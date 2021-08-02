@@ -19,7 +19,7 @@ exports.list = async (req, res) => {
 
     const users = await User.find(conditions, User).skip(from).limit(limit);
 
-    const sumUsers = await User.countDocuments(conditions);
+    //const sumUsers = await User.countDocuments(conditions);
     res.status(200).json(users);
   } catch (e) {
     console.log(e.message);
@@ -52,7 +52,6 @@ exports.create = async (req, res) => {
     phoneNumber,
     address,
     position,
-    status,
     email,
     password,
     role,
@@ -74,19 +73,20 @@ exports.create = async (req, res) => {
       phoneNumber,
       address,
       position,
-      status,
       email,
       password,
       role,
     });
+
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
+
 
     await user.save();
 
     const payload = {
       user: {
-        id: user.id,
+        id: user._id,
       },
     };
     jwt.sign(
@@ -123,12 +123,11 @@ exports.update = async (req, res) => {
       "password",
       "role",
       "email",
-      "img",
-      "status",
     ]);
+
     const userBD = await User.findByIdAndUpdate(id, user, {
       new: true,
-      runValidators: true,
+      //runValidators: true,
     });
     res.status(200).json({ userBD });
   } catch (e) {

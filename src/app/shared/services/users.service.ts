@@ -17,7 +17,7 @@ export class UsersService {
       .pipe(catchError(this.handlerError));
   }
 
-  search(userId: number): Observable<UserI> {
+  search(userId: string): Observable<UserI> {
     return this.http
       .get<any>(`${environment.API_URL}/user/${userId}`)
       .pipe(catchError(this.handlerError));
@@ -29,13 +29,13 @@ export class UsersService {
       .pipe(catchError(this.handlerError));
   }
 
-  update(userId: number, user: UserI): Observable<UserI> {
+  update(userId: string, user: UserI): Observable<UserI> {
     return this.http
       .put<UserI>(`${environment.API_URL}/user/${userId}`, user)
       .pipe(catchError(this.handlerError));
   }
 
-  delete(userId: number): Observable<any> {
+  delete(userId: string): Observable<any> {
     return this.http
       .delete<UserI>(`${environment.API_URL}/user/${userId}`)
       .pipe(catchError(this.handlerError));

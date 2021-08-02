@@ -26,11 +26,12 @@ export class ModalComponent implements OnInit {
   ngOnInit(): void {
     if (this.data?.user.hasOwnProperty('_id')) {
       this.actionTODO = Action.EDIT;
+      this.data.title = 'Actualizar usuario';
+      this.data.icon = 'manage_accounts'
       this.showPasswordField = false;
       this.userForm.baseForm.get('password')?.setValidators(null);
       this.userForm.baseForm.updateValueAndValidity();
       this.patchFormData();
-
     }
   }
 
@@ -38,14 +39,13 @@ export class ModalComponent implements OnInit {
     const formValue = this.userForm.baseForm.value;
     if (this.actionTODO === Action.CREATE) {
       this.userService.create(formValue).subscribe((res) => {
-        //console.log('new', res);
-
+        console.log('new', res);
       });
     } else {
       //edit
-      const userId = this.data?.user?.id;
+      const userId = this.data?.user?._id;
       this.userService.update(userId, formValue).subscribe((res) => {
-       // console.log('update', res);
+        console.log('update', res);
       });
     }
   }
@@ -66,6 +66,5 @@ export class ModalComponent implements OnInit {
       position: this.data?.user?.position,
       role: this.data?.user?.role,
     });
-
   }
 }
