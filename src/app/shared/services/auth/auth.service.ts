@@ -11,10 +11,6 @@ const helper = new JwtHelperService();
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // private loggedIn = new BehaviorSubject<boolean>(false);
-  // private role = new BehaviorSubject<Roles>(null);
-  // private userToken = new BehaviorSubject<string>('');
-
   private user = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient, private router: Router) {
@@ -29,31 +25,6 @@ export class AuthService {
     return this.user.getValue();
   }
 
-  // get isLogged(): Observable<boolean> {
-  //   return this.loggedIn.asObservable();
-  // }
-
-  // get isAdmin$(): Observable<Roles> {
-  //   return this.role.asObservable();
-  // }
-
-  // get userTokenValue(): string {
-  //   return this.userToken.getValue();
-  // }
-
-  // register(authData: UserI): Observable<UserResponseI> {
-  //   return this.http
-  //     .post<UserResponseI>(`${environment.API_URL}/signup`, authData)
-  //     .pipe(
-  //       map((res: UserResponseI) => {
-  //         if (res) {
-  //           // guardar token
-  //           this.saveStorage(res);
-  //         }
-  //       })
-  //     );
-  // }
-
   login(authData: UserI): Observable<UserResponseI | void> {
     return this.http
       .post<UserResponseI>(`${environment.API_URL}/signin`, authData)
@@ -61,9 +32,6 @@ export class AuthService {
         map((user: UserResponseI) => {
           this.saveStorage(user);
           this.user.next(user);
-          // this.loggedIn.next(true);
-          // this.role.next(user.role);
-          // this.userToken.next(user.token);
           return user;
         }),
         catchError((e) => this.handlerError(e))
@@ -73,10 +41,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('user');
     this.user.next(null);
-    // this.loggedIn.next(false);
-    // this.role.next(null);
-    // this.userToken.next('');
-    this.router.navigateByUrl('');
+    this.router.navigateByUrl('/login');
   }
 
   private saveStorage(user: UserResponseI): void {

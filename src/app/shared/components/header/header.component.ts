@@ -94,19 +94,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
-    // this.authService.isLogged
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((res) => (this.isLogged = res));
     this.authService.user$
       .pipe(takeUntil(this.destroy$))
       .subscribe((user: UserResponseI) => {
         this.isLogged = true;
-        this.isAdmin= user?.role;
+        this.isAdmin = user?.role;
       });
-
-    // this.authService.isAdmin$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((user) => (this.isAdmin = res));
   }
 
   ngOnDestroy(): void {

@@ -1,0 +1,36 @@
+.container {
+  width: 100%;
+  padding: 1rem 0;
+  /* border: solid 1px red; */
+}
+.mat-dialog-title-container {
+  display: flex;
+  column-gap: 5px;
+  width: 100%;
+  /* border: solid 1px red; */
+}
+/* .mat-dialog-title-container h2 {
+  display: inline-flex;
+  align-items: center;
+} */
+.mat-form-field-container {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 20px;
+  width: 100%;
+  /* border: solid 1px green; */
+}
+
+.full-width-input {
+  flex-grow: 1;
+  /* border: solid 1px orange; */
+}
+.mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+  /* border: solid 1px green; */
+}
+mat-icon {
+  margin-top: 2px;
+  /* border: solid 1px red; */
+}

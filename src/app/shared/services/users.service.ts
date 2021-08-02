@@ -35,7 +35,7 @@ export class UsersService {
       .pipe(catchError(this.handlerError));
   }
 
-  delete(userId: number): Observable<{}> {
+  delete(userId: number): Observable<any> {
     return this.http
       .delete<UserI>(`${environment.API_URL}/user/${userId}`)
       .pipe(catchError(this.handlerError));

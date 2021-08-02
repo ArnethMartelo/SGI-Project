@@ -10,7 +10,7 @@ exports.list = async (req, res) => {
     let from = req.query.from || 0;
     from = Number(from);
 
-    let limit = req.query.limit || 5;
+    let limit = req.query.limit || 5000;
     limit = Number(limit);
 
     const conditions = {
