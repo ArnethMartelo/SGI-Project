@@ -31,11 +31,8 @@ exports.list = async (req, res) => {
 exports.search = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-
-    res.status(200).json({
-      message: "User found",
-      user,
-    });
+    // console.log(user)
+    res.status(200).send(user);
   } catch (e) {
     console.log(e.message);
     res.status(404).json({ message: "user not found" });

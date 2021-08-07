@@ -1,8 +1,16 @@
-export type Roles = 'EMPLOYEE' | 'ADMIN' | null;
+export type Roles = 'employee' | 'admin' | null;
 
 export interface UserI {
-  username: string;
+  name: string;
+  lastName: string;
+  idType: string;
+  idNumber: string;
+  address: string;
+  phoneNumber: number;
+  email: string;
+  position: string;
   password: string;
+  role: Roles;
 }
 
 export interface UserResponseI {

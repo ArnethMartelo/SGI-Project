@@ -1,0 +1,329 @@
+<h2 mat-dialog-title>
+  <mat-icon>{{ data?.icon }}</mat-icon>
+  {{ data?.title }}
+</h2>
+
+<mat-dialog-content>
+  <mat-accordion class="accordion-container-align">
+    <form [formGroup]="incidentForm" (ngSubmit)="onSave()">
+      <mat-expansion-panel
+        [expanded]="step === 0"
+        (opened)="setStep(0)"
+        hideToggle
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> INCIDENTADO </mat-panel-title>
+          <mat-panel-description>
+            Información de quien sufrió el incidente
+            <mat-icon>sick</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Número de documento</mat-label>
+          <input matInput formControlName="idNumber" />
+          <button type="button" (click)="onSearch()" mat-icon-button matSuffix>
+            <mat-icon class="search-icon">arrow_circle_up</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input matInput formControlName="name" />
+          <mat-error *ngIf="checkField('name')">{{
+            getErrorMessage("name")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Apellidos</mat-label>
+          <input matInput formControlName="lastName" />
+          <mat-error *ngIf="checkField('lastName')">{{
+            getErrorMessage("lastName")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de identificación</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="idType"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="checkField('idType')">{{
+            getErrorMessage("idType")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input matInput formControlName="address" />
+          <mat-error *ngIf="checkField('address')">{{
+            getErrorMessage("address")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Correo electrónico</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            placeholder="ejemplo@correo.com"
+          />
+          <mat-error *ngIf="checkField('email')">{{
+            getErrorMessage("email")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Telefóno</mat-label>
+          <input matInput formControlName="phoneNumber" />
+          <mat-error *ngIf="checkField('phoneNumber')">{{
+            getErrorMessage("phoneNumber")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Cargo</mat-label>
+          <input matInput formControlName="position" placeholder="Cargo" />
+          <mat-error *ngIf="checkField('position')">{{
+            getErrorMessage("position")
+          }}</mat-error>
+        </mat-form-field>
+
+        <mat-action-row>
+          <button mat-button type="button" color="primary" (click)="nextStep()">
+            Siguiente
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel
+        [expanded]="step === 1"
+        (opened)="setStep(1)"
+        hideToggle
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> INCIDENTE </mat-panel-title>
+          <mat-panel-description>
+            Información general del incidente
+            <mat-icon>info</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha del incidente</mat-label>
+          <input matInput formControlName="date" [matDatepicker]="picker" />
+          <mat-error *ngIf="checkField('date')">{{
+            getErrorMessage("date")
+          }}</mat-error>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Lugar del accidente</mat-label>
+          <input
+            type="text"
+            matInput
+            [formControl]="site"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="checkField('site')">{{
+            getErrorMessage("site")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de incidente</mat-label>
+          <input
+            type="text"
+            matInput
+            [formControl]="type"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="checkField('type')">{{
+            getErrorMessage("type")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>¿Causó la muerte al empleado?:</mat-label>
+          <mat-select formControlName="deadly">
+            <mat-option value="si">SI</mat-option>
+            <mat-option value="no">NO</mat-option>
+          </mat-select>
+          <mat-error *ngIf="checkField('deadly')">{{
+            getErrorMessage("deadly")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="description-full-width" appearance="outline">
+          <mat-label
+            >DESCRIBA DETALLADAMENTE EL INCIDENTE. QUÉ LO ORIGINÓ O CAUSÓ
+            (Responda a las preguntas qué paso, cuándo, dónde, cómo y por
+            qué)</mat-label
+          >
+          <textarea
+            matInput
+            formControlName="description"
+            placeholder="Su descripción aquí..."
+          ></textarea>
+          <mat-error *ngIf="checkField('description')">{{
+            getErrorMessage("description")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-action-row>
+          <button mat-button type="button" color="warn" (click)="prevStep()">
+            Atrás
+          </button>
+          <button mat-button type="button" color="primary" (click)="nextStep()">
+            Siguiente
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel
+        [expanded]="step === 2"
+        (opened)="setStep(2)"
+        hideToggle
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> INFORMADOR </mat-panel-title>
+          <mat-panel-description>
+            Información de la persona que reporta
+            <mat-icon>account_circle</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Apellidos</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de documento</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="idType"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Número de documento</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Telefóno</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Cargo</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field>
+
+        <!-- <mat-action-row>
+          <button mat-button type="button" color="warn" (click)="prevStep()">Atrás</button>
+          <button mat-button type="button" color="primary" (click)="nextStep()">
+            Siguiente
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel
+        [expanded]="step === 3"
+        (opened)="setStep(3)"
+        hideToggle
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> I. EMPLEADOR </mat-panel-title>
+          <mat-panel-description>
+            Información general del empleador
+            <mat-icon>business</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-form-field appearance="outline">
+          <mat-label>NIT</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre o razón social</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de vinculador laboral</mat-label>
+          <mat-select [disabled]="true">
+            <mat-option
+              *ngFor="let vinculatorType of vinculatorTypes"
+              [value]="vinculatorType.value"
+            >
+              {{ vinculatorType.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Telefóno</mat-label>
+          <input matInput required [disabled]="true" />
+        </mat-form-field> -->
+
+        <mat-action-row>
+          <button mat-button type="button" color="warn" (click)="prevStep()">
+            Atrás
+          </button>
+          <button mat-button type="button" color="primary" (click)="nextStep()">
+            Finalizar
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </form>
+  </mat-accordion>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-flat-button
+    [mat-dialog-close]="true"
+    color="primary"
+    type="submit"
+    ckdFocusInitial
+    [disabled]="!incidentForm.valid"
+  >
+    Guardar
+  </button>
+  <button mat-stroked-button color="primary" mat-dialog-close>Cancelar</button>
+</mat-dialog-actions>

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const employee = require("./employee.model");
+const employer = require("./employer.model");
 const Schema = mongoose.Schema;
 const incidentSchema = new Schema(
   {
@@ -12,6 +13,7 @@ const incidentSchema = new Schema(
     description: { type: String },
     victim: { type: Schema.ObjectId, ref: employee },
     informer: { type: Schema.ObjectId, ref: employee },
+    employer: { type: Schema.ObjectId, ref: employer },
   },
   {
     timeStamps: true,

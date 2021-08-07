@@ -65,14 +65,15 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         if (res) {
-          this.router.navigateByUrl('');
-          //this.loginForm.baseForm.reset();
+          const user = res;
+          if (user.role === 'admin') {
+            this.router.navigateByUrl('/admin');
+          } else {
+            this.router.navigateByUrl('');
+          }
         }
-        this.loginForm.baseForm.reset();
       });
   }
-
-
 
   getErrorMessage(field: string): string {
     return this.loginForm.getErrorMessage(field);

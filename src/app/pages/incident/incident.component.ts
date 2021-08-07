@@ -1,66 +1,84 @@
-import { IncidentService } from '@shared/services/incident.service';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, NgForm, Validators } from '@angular/forms';
-
-interface IdType {
-  value: string;
-  viewValue: string;
-}
-
-interface IncidentType {
-  value: string;
-  viewValue: string;
-}
+import { IncidentService } from './incident-service/incident.service';
+import { takeUntil } from 'rxjs/operators';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
+import { IncidentModalComponent } from './incident-modal/incident-modal.component';
 
 @Component({
   selector: 'app-incident',
   templateUrl: './incident.component.html',
   styleUrls: ['./incident.component.css'],
 })
-export class IncidentComponent implements OnInit {
-  step = 0;
-
-  setStep(index: number) {
-    this.step = index;
-  }
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
-  }
-
-  labelPosition: 'before' | 'after' = 'after';
-
-  idTypeControl = new FormControl('', Validators.required);
-  selectFormControl = new FormControl('', Validators.required);
-  idTypes: IdType[] = [
-    { value: 'cedula de ciudadania-0', viewValue: 'Cédula de ciudadanía' },
-    { value: 'Tarjeta de identidad-1', viewValue: 'Tarjeta de identidad' },
-    { value: 'cedula de extranjeria-2', viewValue: 'cédula de extranjeria' },
-    { value: 'Pasaporte-3', viewValue: 'Pasaporte' },
+export class IncidentComponent implements OnInit, AfterViewInit, OnDestroy {
+  displayedColumns: string[] = [
+    'serial',
+    'date',
+    'description',
+    'victim',
+    'type',
+    'site',
+    'deadly',
+    'informer',
+    'actions',
   ];
+  dataSource = new MatTableDataSource();
+  private destroy$ = new Subject<any>();
 
-  incidentTypes: IncidentType[] = [
-    { value: 'Transito-0', viewValue: 'Tránsito' },
-    { value: 'Deportivo-1', viewValue: 'Deportivo' },
-    { value: 'violencia-2', viewValue: 'Violencia' },
-    { value: 'trabajo-4', viewValue: 'Propio del trabajo' },
-  ];
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  @ViewChild(MatPaginator) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
 
-  time = { hour: 13, minute: 30 };
-  meridian = true;
+  constructor(
+    private dialog: MatDialog,
+    private incidentService: IncidentService
+  ) {}
 
-  constructor(private incidentSvc: IncidentService) {}
+  ngOnInit(): void {
+    this.incidentService.list().subscribe((incidents) => {
+      this.dataSource.data = incidents;
+    });
+  }
 
-  ngOnInit(): void {}
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
 
-  onAddIncident(f: NgForm): void {
-    this.incidentSvc.addIncident(f.value);
-    if (f.valid) {
-      f.resetForm();
+  onDelete(incidentId: string): void {
+    if (window.confirm('¿Seguro quieres eliminar este incidente?')) {
+      this.incidentService
+        .delete(incidentId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res) => {
+          window.alert('Incidente Eliminado');
+        });
     }
+  }
+
+  openDialog(incident = {}): void {
+    this.dialog.open(IncidentModalComponent, {
+      width: '40vw',
+      height: '90vh',
+      hasBackdrop: false,
+      data: { title: 'Nuevo Incidente', icon: 'add_task', incident },
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
   }
 }

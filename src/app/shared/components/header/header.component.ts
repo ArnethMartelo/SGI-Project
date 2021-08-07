@@ -26,6 +26,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { UtilsService } from '@app/shared/services/utils.service';
 
 // enum VisibilityState {
 //   Visible = 'visible',
@@ -69,7 +70,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   //   return this.isVisible ? VisibilityState.Visible : VisibilityState.Hidden;
   // }
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private utilsService: UtilsService
+  ) {}
 
   // ngAfterViewInit() {
   //   const scroll$ = fromEvent(window, 'scroll').pipe(
@@ -113,5 +117,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.authService.logout();
+    this.utilsService.opensidebar(false);
   }
 }

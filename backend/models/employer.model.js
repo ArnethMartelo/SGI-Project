@@ -2,24 +2,15 @@ const mongoose = require("mongoose");
 mongoose.set("useCreateIndex", true);
 const uniqueValidator = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
-const employeeSchema = new Schema(
+const employerSchema = new Schema(
   {
     name: {
       type: String,
       required: [true, "is required"],
       trim: true,
     },
-    lastName: {
-      type: String,
-      required: [true, "is required"],
-      trim: true,
-    },
-    idType: {
-      type: String,
-      required: [true, "is required"],
-    },
-    idNumber: {
-      type: String,
+    nit: {
+      type: Number,
       required: [true, "is required"],
       trim: true,
       unique: true,
@@ -41,31 +32,12 @@ const employeeSchema = new Schema(
       unique: true,
       match: [/\S+@\S+\.\S+/, "Correo inválido"],
     },
-    position: {
-      type: String,
-      required: [true, "is required"],
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: [true, "is required"],
-      trim: true,
-      minLength: [8, "Mínimo 8 caracteres"],
-    },
-    role: {
-      type: String,
-      required: [true, "is required"],
-    },
-    status: {
-      type: Boolean,
-      default: true,
-    },
   },
   {
     timeStamps: true,
   }
 );
 
-employeeSchema.plugin(uniqueValidator);
+employerSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model("Employee", employeeSchema);
+module.exports = mongoose.model("Employer", employerSchema);

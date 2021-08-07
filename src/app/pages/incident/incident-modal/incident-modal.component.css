@@ -1,0 +1,50 @@
+.accordion-container-align .incidentForm{
+margin: 1rem auto;
+}
+
+.accordion-container-align
+  .mat-expansion-panel-header-title
+  .accordion-container-align
+  .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.accordion-container-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordion-container-align .mat-form-field {
+  width: 100%;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-end;
+  flex-grow: 1;
+  /* border: 2px solid yellow; */
+}
+
+h2 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  column-gap: 5px;
+  /* border: solid 1px red;*/
+}
+
+textarea {
+  height: 20vh;
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+  /* border: solid 1px green; */
+}
+
+.search-icon{
+  transform: rotate(90deg);
+  color: blue;
+}
+
