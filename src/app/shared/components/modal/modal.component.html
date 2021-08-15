@@ -39,10 +39,16 @@
           <mat-form-field class="full-width-input" appearance="outline">
             <mat-label>Tipo de identificación</mat-label>
             <mat-select formControlName="idType">
-              <mat-option value="Cédula de ciudadanía">Cédula de ciudadanía</mat-option>
-              <mat-option value="pasaporte">Pasaporte</mat-option>
-              <mat-option value="cedula de extranjeria">Cédula de extranjería</mat-option>
-              <mat-option value="tarjeta de identidad">Tarjeta de identidad</mat-option>
+              <mat-option value="Cédula de ciudadanía"
+                >Cédula de ciudadanía</mat-option
+              >
+              <mat-option value="Pasaporte">Pasaporte</mat-option>
+              <mat-option value="Cédula de extranjería"
+                >Cédula de extranjería</mat-option
+              >
+              <mat-option value="Tarjeta de identidad"
+                >Tarjeta de identidad</mat-option
+              >
             </mat-select>
             <mat-error *ngIf="checkField('idType')">{{
               userForm.getErrorMessage("idType")

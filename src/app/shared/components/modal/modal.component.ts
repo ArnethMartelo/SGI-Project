@@ -4,7 +4,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 enum Action {
-  EDIT = 'edit',
+  UPDATE = 'update',
   CREATE = 'create',
 }
 
@@ -26,8 +26,8 @@ export class ModalComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data?.user.hasOwnProperty('_id')) {
-
-      this.actionTODO = Action.EDIT;
+      console.log('edit');
+      this.actionTODO = Action.UPDATE;
       this.data.title = 'Actualizar usuario';
       this.data.icon = 'manage_accounts';
       this.showPasswordField = false;
@@ -38,18 +38,20 @@ export class ModalComponent implements OnInit {
   }
 
   onSave() {
-
     const formValue = this.userForm.baseForm.value;
     if (this.actionTODO === Action.CREATE) {
       this.usersService.create(formValue).subscribe((res) => {
-        console.log('new', res);
+        console.log('new ->', res);
       });
+      this.userForm.baseForm.reset();
+
      } else {
       //edit
       const userId = this.data?.user?._id;
       this.usersService.update(userId, formValue).subscribe((res) => {
-        console.log('update', res);
+        console.log('update ->', res);
       });
+      this.userForm.baseForm.reset();
     }
   }
 

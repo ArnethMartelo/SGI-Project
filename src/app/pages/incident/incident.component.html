@@ -20,27 +20,33 @@
 
       <!-- date Column -->
       <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          Fecha
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.date | date: "d/M/yyyy" }}
+        </td>
       </ng-container>
 
       <!-- type Column -->
       <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Incidente</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Tipo de Incidente
+        </th>
         <td mat-cell *matCellDef="let element">{{ element.type }}</td>
       </ng-container>
 
       <!-- site Column -->
       <ng-container matColumnDef="site">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Lugar del incidente</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Lugar del incidente
+        </th>
         <td mat-cell *matCellDef="let element">{{ element.site }}</td>
       </ng-container>
 
       <!-- deadly Column -->
       <ng-container matColumnDef="deadly">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>¿Causó la muerte?</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          ¿Causó la muerte?
+        </th>
         <td mat-cell *matCellDef="let element">{{ element.deadly }}</td>
       </ng-container>
 
@@ -52,16 +58,18 @@
 
       <!-- victim Column -->
       <ng-container matColumnDef="victim">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          Víctima
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element.victim }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Víctima</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.victim_id.name + " " + element.victim_id.lastName }}
+        </td>
       </ng-container>
 
       <!-- informer Column -->
       <ng-container matColumnDef="informer">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Reporta</th>
-        <td mat-cell *matCellDef="let element">{{ element.informer }}</td>
+        <td mat-cell *matCellDef="let element">
+          {{ element.informer_id.name + " " + element.informer_id.lastName }}
+        </td>
       </ng-container>
 
       <!-- actions Column -->
@@ -69,10 +77,18 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
         <td mat-cell *matCellDef="let element">
           <div class="table-button-row">
-            <button (click)="openDialog(element)" mat-stroked-button color="primary">
+            <button
+              (click)="openDialog(element)"
+              mat-stroked-button
+              color="primary"
+            >
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-flat-button color="warn" (click)="onDelete(element._id)">
+            <button
+              mat-flat-button
+              color="warn"
+              (click)="onDelete(element._id)"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </div>
@@ -83,7 +99,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <mat-paginator
-      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageSizeOptions]="[10, 25, 50, 100]"
       aria-label="Select page of users"
     ></mat-paginator>
     <button (click)="openDialog()" class="add" mat-fab color="primary">

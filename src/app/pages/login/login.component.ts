@@ -59,7 +59,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     const formValue = this.loginForm.baseForm.value;
-
     this.authService
       .login(formValue)
       .pipe(takeUntil(this.destroy$))

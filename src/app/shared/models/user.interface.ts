@@ -1,6 +1,7 @@
 export type Roles = 'employee' | 'admin' | null;
 
 export interface UserI {
+  [x: string]: any;
   name: string;
   lastName: string;
   idType: string;
@@ -16,7 +17,7 @@ export interface UserI {
 export interface UserResponseI {
   message: string;
   token: string;
-  userId: string;
+  idNumber: string;
   role: Roles;
   expiresIn: string;
 }

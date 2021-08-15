@@ -34,6 +34,7 @@ const employerSchema = new Schema(
     },
   },
   {
+    versionKey: false,
     timeStamps: true,
   }
 );

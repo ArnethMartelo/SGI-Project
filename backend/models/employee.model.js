@@ -62,6 +62,7 @@ const employeeSchema = new Schema(
     },
   },
   {
+    versionKey: false,
     timeStamps: true,
   }
 );

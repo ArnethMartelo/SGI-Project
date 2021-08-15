@@ -5,7 +5,7 @@
 
 <mat-dialog-content>
   <mat-accordion class="accordion-container-align">
-    <form [formGroup]="incidentForm" (ngSubmit)="onSave()">
+    <form [formGroup]="incidentForm">
       <mat-expansion-panel
         [expanded]="step === 0"
         (opened)="setStep(0)"
@@ -19,12 +19,22 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
+        <mat-form-field appearance="outline" [hidden]="true">
+          <mat-label>Victim</mat-label>
+          <input matInput formControlName="victim_id" />
+          <mat-error *ngIf="checkField('victim_id')">{{
+            getErrorMessage("victim_id")
+          }}</mat-error>
+        </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Número de documento</mat-label>
           <input matInput formControlName="idNumber" />
-          <button type="button" (click)="onSearch()" mat-icon-button matSuffix>
+          <button type="button" (click)="search()" mat-icon-button matSuffix>
             <mat-icon class="search-icon">arrow_circle_up</mat-icon>
           </button>
+          <mat-error *ngIf="checkField('idNumber')">{{
+            getErrorMessage("idNumber")
+          }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Nombres</mat-label>
@@ -42,20 +52,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Tipo de identificación</mat-label>
-          <input
-            type="text"
-            matInput
-            formControlName="idType"
-            [matAutocomplete]="auto"
-          />
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option
-              *ngFor="let option of filteredOptions | async"
-              [value]="option"
-            >
-              {{ option }}
-            </mat-option>
-          </mat-autocomplete>
+          <input matInput formControlName="idType" />
           <mat-error *ngIf="checkField('idType')">{{
             getErrorMessage("idType")
           }}</mat-error>
@@ -113,6 +110,13 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
+        <mat-form-field appearance="outline" [hidden]="true">
+          <mat-label>Incidente N°</mat-label>
+          <input matInput formControlName="serial" type="text" />
+          <mat-error *ngIf="checkField('serial')">{{
+            getErrorMessage("serial")
+          }}</mat-error>
+        </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Fecha del incidente</mat-label>
           <input matInput formControlName="date" [matDatepicker]="picker" />
@@ -127,40 +131,22 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Lugar del accidente</mat-label>
-          <input
-            type="text"
-            matInput
-            [formControl]="site"
-            [matAutocomplete]="auto"
-          />
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option
-              *ngFor="let option of filteredOptions | async"
-              [value]="option"
-            >
-              {{ option }}
+          <mat-select formControlName="site">
+            <mat-option *ngFor="let site of sites" [value]="site.value">
+              {{ site.viewValue }}
             </mat-option>
-          </mat-autocomplete>
+          </mat-select>
           <mat-error *ngIf="checkField('site')">{{
             getErrorMessage("site")
           }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Tipo de incidente</mat-label>
-          <input
-            type="text"
-            matInput
-            [formControl]="type"
-            [matAutocomplete]="auto"
-          />
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option
-              *ngFor="let option of filteredOptions | async"
-              [value]="option"
-            >
-              {{ option }}
+          <mat-select formControlName="type">
+            <mat-option *ngFor="let type of types" [value]="type.value">
+              {{ type.viewValue }}
             </mat-option>
-          </mat-autocomplete>
+          </mat-select>
           <mat-error *ngIf="checkField('type')">{{
             getErrorMessage("type")
           }}</mat-error>
@@ -212,42 +198,54 @@
             <mat-icon>account_circle</mat-icon>
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <mat-form-field appearance="outline">
-          <mat-label>Nombres</mat-label>
-          <input matInput required [disabled]="true" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Apellidos</mat-label>
-          <input matInput required [disabled]="true" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Tipo de documento</mat-label>
-          <input
-            type="text"
-            matInput
-            formControlName="idType"
-            [matAutocomplete]="auto"
-          />
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option
-              *ngFor="let option of filteredOptions | async"
-              [value]="option"
-            >
-              {{ option }}
-            </mat-option>
-          </mat-autocomplete>
+        <mat-form-field appearance="outline" [hidden]="true">
+          <mat-label>Informer</mat-label>
+          <input matInput formControlName="informer_id" />
+          <mat-error *ngIf="checkField('informer_id')">{{
+            getErrorMessage("informer_id")
+          }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Número de documento</mat-label>
-          <input matInput required [disabled]="true" />
+          <input matInput formControlName="informer_idNumber" />
+          <mat-error *ngIf="checkField('informer_idNumber')">{{
+            getErrorMessage("informer_idNumber")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input matInput formControlName="informer_name" />
+          <mat-error *ngIf="checkField('informer_name')">{{
+            getErrorMessage("informer_name")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Apellidos</mat-label>
+          <input matInput formControlName="informer_lastName" />
+          <mat-error *ngIf="checkField('informer_lastName')">{{
+            getErrorMessage("informer_lastName")
+          }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de documento</mat-label>
+          <input matInput formControlName="informer_idType" />
+          <mat-error *ngIf="checkField('informer_idType')">{{
+            getErrorMessage("informer_idType")
+          }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Telefóno</mat-label>
-          <input matInput required [disabled]="true" />
+          <input matInput formControlName="informer_phoneNumber" />
+          <mat-error *ngIf="checkField('informer_phoneNumber')">{{
+            getErrorMessage("informer_phoneNumber")
+          }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Cargo</mat-label>
-          <input matInput required [disabled]="true" />
+          <input matInput formControlName="informer_position" />
+          <mat-error *ngIf="checkField('informer_position')">{{
+            getErrorMessage("informer_position")
+          }}</mat-error>
         </mat-form-field>
 
         <!-- <mat-action-row>
@@ -257,7 +255,6 @@
           </button>
         </mat-action-row>
       </mat-expansion-panel>
-
       <mat-expansion-panel
         [expanded]="step === 3"
         (opened)="setStep(3)"
@@ -320,6 +317,7 @@
     [mat-dialog-close]="true"
     color="primary"
     type="submit"
+    (click)="onSave()"
     ckdFocusInitial
     [disabled]="!incidentForm.valid"
   >

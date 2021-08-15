@@ -12,7 +12,7 @@ export class AdminInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
-    if (req.url.includes('user')) {
+    if (req.url.includes('user') || req.url.includes('incident')) {
       const userValue = this.authService.userValue;
       const authReq = req.clone({
         setHeaders: {

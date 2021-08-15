@@ -21,6 +21,10 @@
   /* border: solid 1px green; */
 }
 
+.mat-form-field {
+  width: 100%;
+}
+
 .full-width-input {
   flex-grow: 1;
   /* border: solid 1px orange; */

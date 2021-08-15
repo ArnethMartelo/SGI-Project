@@ -1,11 +1,9 @@
-import { UserFormTemplate } from './../../../shared/utils/user-form-template';
-import { UsersService } from './../../../shared/services/users.service';
+import { AuthService } from '@shared/services/auth/auth.service';
+import { UsersService } from '@shared/services/users.service';
 import { IncidentService } from '../incident-service/incident.service';
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 
 enum Action {
   UPDATE = 'update',
@@ -16,7 +14,7 @@ interface IncidentType {
   value: string;
   viewValue: string;
 }
-interface Site {
+interface IncidentSite {
   value: string;
   viewValue: string;
 }
@@ -28,6 +26,7 @@ interface Site {
 })
 export class IncidentModalComponent implements OnInit {
   actionToDo = Action.CREATE;
+  consecutivo: number = 1;
 
   step = 0;
   setStep(index: number) {
@@ -39,80 +38,152 @@ export class IncidentModalComponent implements OnInit {
   prevStep() {
     this.step--;
   }
-  incidentTypes: IncidentType[] = [
-    { value: 'transito-0', viewValue: 'Tránsito' },
-    { value: 'deportivo-1', viewValue: 'Deportivo' },
-    { value: 'violencia-2', viewValue: 'Violencia' },
-    { value: 'trabajo-4', viewValue: 'Propio del trabajo' },
+
+  types: IncidentType[] = [
+    { value: 'Tránsito', viewValue: 'Tránsito' },
+    { value: 'Deportivo', viewValue: 'Deportivo' },
+    { value: 'Violencia', viewValue: 'Violencia' },
+    { value: 'Doméstico', viewValue: 'Doméstico' },
+    { value: 'Propio del trabajo', viewValue: 'Propio del trabajo' },
   ];
 
-  sites: Site[] = [
-    { value: 'empresa-0', viewValue: 'Empresa' },
-    { value: 'calle-1', viewValue: 'Calle' },
-    { value: 'casa-2', viewValue: 'Casa' },
+  sites: IncidentSite[] = [
+    { value: 'Empresa', viewValue: 'Empresa' },
+    { value: 'Calle', viewValue: 'Calle' },
+    { value: 'Casa', viewValue: 'Casa' },
   ];
+  private isValidEmail = /\S+@\S+\.\S+/;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private incidentService: IncidentService,
+    private usersService: UsersService,
+    private authService: AuthService,
     private fb: FormBuilder
   ) {}
 
   incidentForm = this.fb.group({
-    serial: ['', [Validators.required]],
+    victim_id: ['', [Validators.required]],
+    name: [{ value: '', disabled: true }, Validators.required],
+    lastName: [{ value: '', disabled: true }, Validators.required],
+    idType: [{ value: '', disabled: true }, Validators.required],
+    idNumber: ['', [Validators.required]],
+    address: [{ value: '', disabled: true }, Validators.required],
+    phoneNumber: [{ value: '', disabled: true }, Validators.required],
+    email: [
+      { value: '', disabled: true },
+      Validators.required,
+      Validators.pattern(this.isValidEmail),
+    ],
+    position: [{ value: '', disabled: true }, Validators.required],
+
+    serial: ['', [Validators.nullValidator]],
     site: ['', [Validators.required]],
     type: ['', [Validators.required]],
     date: ['', [Validators.required]],
-    description: ['', [Validators.required, Validators.minLength(200)]],
+    description: ['', [Validators.required, Validators.minLength(0)]],
     deadly: ['', [Validators.required]],
+
+    informer_id: ['', [Validators.required]],
+    informer_name: [{ value: '', disabled: true }, Validators.required],
+    informer_idType: [{ value: '', disabled: true }, Validators.required],
+    informer_lastName: [{ value: '', disabled: true }, Validators.required],
+    informer_idNumber: [{ value: '', disabled: true }, Validators.required],
+    informer_phoneNumber: [{ value: '', disabled: true }, Validators.required],
+    informer_position: [{ value: '', disabled: true }, Validators.required],
   });
-  site = new FormControl();
-  siteOptions: string[] = [
-    'Cédula de ciudadanía',
-    'Pasaporte',
-    'Tarjeta de identidad',
-    'Cédula de extranjería',
-  ];
-  type = new FormControl();
-  typeOptions: string[] = [
-    'Cédula de ciudadanía',
-    'Pasaporte',
-    'Tarjeta de identidad',
-    'Cédula de extranjería',
-  ];
-  filteredOptions!: Observable<string[]>;
 
   ngOnInit(): void {
-    this._filter(this.site, this.siteOptions);
+    if (this.data?.incident.hasOwnProperty('_id')) {
+      this.actionToDo = Action.UPDATE;
+      this.data.title = 'Actualizar incidente';
+      this.data.icon = 'published_with_changes';
+      this.patchFormData();
+    } else {
+      this.addSerial();
+      this.patchDataInformer();
+    }
   }
-
-  private _filter(field: FormControl, options:string[]): void {
-    this.filteredOptions = field.valueChanges.pipe(
-      startWith(''),
-      map((value) => {
-        const filterValue = value.toLowerCase();
-        return options.filter((option) =>
-          option.toLowerCase().includes(filterValue)
-        );
-      })
-    );
-  }
-
 
   onSave(): void {
     const formValue = this.incidentForm.value;
     if (this.actionToDo === Action.CREATE) {
       this.incidentService.create(formValue).subscribe((res) => {
-        console.log('new', res);
+        console.log('new ->', res);
       });
-      // }
-      // else {
-      //   //edit
-      //   const incidentId = this.data.?incident?._id;
-      //   this.incidentService.update(incidentId, formValue).subscribe((res) => {
-      //     console.log('update', res);
-      //   });
+    } else {
+      //edit;
+      const incidentId = this.data.incident._id;
+      this.incidentService.update(incidentId, formValue).subscribe((res) => {
+        console.log('update->', res);
+      });
     }
+  }
+
+  private addSerial(): void {
+    this.incidentService.list().subscribe((data) => {
+      if (!data) {
+        this.consecutivo = 1;
+        this.incidentForm.patchValue({
+          serial: this.consecutivo,
+        });
+      } else {
+        const incidents = data;
+        for (let incident of incidents) {
+          if (this.consecutivo < incident.serial)
+            this.consecutivo = incident.serial;
+          this.consecutivo++;
+        }
+        this.incidentForm.patchValue({
+          serial: this.consecutivo,
+        });
+      }
+    });
+  }
+
+  private patchDataInformer(): void {
+    this.usersService
+      .search(this.authService.userValue.idNumber)
+      .subscribe((data) => {
+        this.incidentForm.patchValue({
+          informer_id: data._id,
+          informer_name: data.name,
+          informer_idType: data.idType,
+          informer_lastName: data.lastName,
+          informer_idNumber: data.idNumber,
+          informer_phoneNumber: data.phoneNumber,
+          informer_position: data.position,
+        });
+      });
+  }
+
+  private patchFormData(): void {
+
+    this.incidentForm.patchValue({
+
+      victim_id: this.data?.incident?.victim_id?._id,
+      name: this.data?.incident?.victim_id?.name,
+      lastName: this.data?.incident?.victim_id?.lastName,
+      idType: this.data?.incident?.victim_id?.idType,
+      idNumber: this.data?.incident?.victim_id?.idNumber,
+      address: this.data?.incident?.victim_id?.address,
+      phoneNumber: this.data?.incident?.victim_id?.phoneNumber,
+      email: this.data?.incident?.victim_id?.email,
+      position: this.data?.incident?.victim_id?.position,
+      serial: this.data?.incident?.serial,
+      site: this.data?.incident?.site,
+      type: this.data?.incident?.type,
+      date: this.data?.incident?.date,
+      description: this.data?.incident?.description,
+      deadly: this.data?.incident?.deadly,
+      informer_id: this.data?.incident?.informer_id?._id,
+      informer_name: this.data?.incident?.informer_id?.name,
+      informer_idType: this.data?.incident?.informer_id?.idType,
+      informer_lastName: this.data?.incident?.informer_id?.lastName,
+      informer_idNumber: this.data?.incident?.informer_id?.idNumber,
+      informer_phoneNumber: this.data?.incident?.informer_id?.phoneNumber,
+      informer_position: this.data?.incident?.informer_id?.position,
+    });
   }
 
   checkField(field: string): boolean | any {
@@ -135,18 +206,22 @@ export class IncidentModalComponent implements OnInit {
     return message;
   }
 
-  onSearch() {
-    // this.usersService.search(this.idNumber.value).subscribe((data) => {
-    //   console.log(this.idNumber.value)
-    //   this.userForm.baseForm.patchValue({
-    //     name: data.name,
-    //     lastName: data.lastName,
-    //     idType: data.idType,
-    //     address: data.address,
-    //     phoneNumber: data.phoneNumber,
-    //     email: data.email,
-    //     position: data.position,
-    // });
-    // });
+  search() {
+    this.usersService
+      .search(this.incidentForm.controls.idNumber.value)
+      .subscribe((data) => {
+        console.log(data);
+
+        this.incidentForm.patchValue({
+          victim_id: data._id,
+          name: data.name,
+          lastName: data.lastName,
+          idType: data.idType,
+          address: data.address,
+          phoneNumber: data.phoneNumber,
+          email: data.email,
+          position: data.position,
+        });
+      });
   }
 }

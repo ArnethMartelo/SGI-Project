@@ -40,6 +40,7 @@ exports.signin = async (req, res) => {
         res.status(200).json({
           token: token,
           role: user.role,
+          idNumber: user.idNumber,
         });
       }
     );
