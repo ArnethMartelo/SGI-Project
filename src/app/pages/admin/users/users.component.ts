@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
-import { ModalComponent } from '@app/shared/components/modal/modal.component';
-import { UsersService } from '@shared/services/users.service';
+import { ModalComponent } from '@app/pages/admin/users/users-modal/modal.component';
+import { UsersService } from '@app/pages/admin/users/users-service/users.service';
 import {
   AfterViewInit,
   Component,
@@ -77,10 +77,10 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openDialog(user = {}): void {
+
     this.dialog.open(ModalComponent, {
       width: '60vw',
       height: '90vh',
-      // hasBackdrop: false,
       data: { title: 'Nuevo Usuario', icon: 'person_add_alt', user },
     });
   }

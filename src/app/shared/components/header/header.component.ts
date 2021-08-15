@@ -1,5 +1,5 @@
 import { UserResponseI } from '@models/user.interface';
-import { AuthService } from './../../services/auth/auth.service';
+import { AuthService } from '../../../pages/auth/auth-service/auth.service';
 import {
   Component,
   OnInit,

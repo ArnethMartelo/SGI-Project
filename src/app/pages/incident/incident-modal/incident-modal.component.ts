@@ -1,9 +1,11 @@
-import { AuthService } from '@shared/services/auth/auth.service';
-import { UsersService } from '@shared/services/users.service';
+import { Subject } from 'rxjs';
+import { AuthService } from '@app/pages/auth/auth-service/auth.service';
+import { UsersService } from '@app/pages/admin/users/users-service/users.service';
 import { IncidentService } from '../incident-service/incident.service';
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { takeUntil } from 'rxjs/operators';
 
 enum Action {
   UPDATE = 'update',
@@ -24,7 +26,9 @@ interface IncidentSite {
   templateUrl: './incident-modal.component.html',
   styleUrls: ['./incident-modal.component.css'],
 })
-export class IncidentModalComponent implements OnInit {
+export class IncidentModalComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<any>();
+
   actionToDo = Action.CREATE;
   consecutivo: number = 1;
 
@@ -108,42 +112,52 @@ export class IncidentModalComponent implements OnInit {
   onSave(): void {
     const formValue = this.incidentForm.value;
     if (this.actionToDo === Action.CREATE) {
-      this.incidentService.create(formValue).subscribe((res) => {
-        console.log('new ->', res);
-      });
+      this.incidentService
+        .create(formValue)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res) => {
+          console.log('new ->', res);
+        });
     } else {
       //edit;
       const incidentId = this.data.incident._id;
-      this.incidentService.update(incidentId, formValue).subscribe((res) => {
-        console.log('update->', res);
-      });
+      this.incidentService
+        .update(incidentId, formValue)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res) => {
+          console.log('update->', res);
+        });
     }
   }
 
   private addSerial(): void {
-    this.incidentService.list().subscribe((data) => {
-      if (!data) {
-        this.consecutivo = 1;
-        this.incidentForm.patchValue({
-          serial: this.consecutivo,
-        });
-      } else {
-        const incidents = data;
-        for (let incident of incidents) {
-          if (this.consecutivo < incident.serial)
-            this.consecutivo = incident.serial;
-          this.consecutivo++;
+    this.incidentService
+      .list()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        if (!data) {
+          this.consecutivo = 1;
+          this.incidentForm.patchValue({
+            serial: this.consecutivo,
+          });
+        } else {
+          const incidents = data;
+          for (let incident of incidents) {
+            if (this.consecutivo < incident.serial)
+              this.consecutivo = incident.serial;
+            this.consecutivo++;
+          }
+          this.incidentForm.patchValue({
+            serial: this.consecutivo,
+          });
         }
-        this.incidentForm.patchValue({
-          serial: this.consecutivo,
-        });
-      }
-    });
+      });
   }
 
   private patchDataInformer(): void {
     this.usersService
       .search(this.authService.userValue.idNumber)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
         this.incidentForm.patchValue({
           informer_id: data._id,
@@ -209,6 +223,7 @@ export class IncidentModalComponent implements OnInit {
   search() {
     this.usersService
       .search(this.incidentForm.controls.idNumber.value)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
         console.log(data);
 
@@ -223,5 +238,10 @@ export class IncidentModalComponent implements OnInit {
           position: data.position,
         });
       });
+  }
+
+  ngOnDestroy(): void {
+
+
   }
 }

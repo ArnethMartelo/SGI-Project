@@ -48,11 +48,13 @@ export class IncidentComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.incidentService.list().subscribe((incidents) => {
-      this.dataSource.data = incidents;
-      // console.log(incidents);
-
-    });
+    this.incidentService
+      .list()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((incidents) => {
+        this.dataSource.data = incidents;
+        // console.log(incidents);
+      });
   }
 
   ngAfterViewInit() {

@@ -14,7 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SidebarModule } from '@shared/components/sidebar/sidebar.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AdminInterceptor } from '@shared/interceptors/admin-interceptor';
-import { ModalComponent } from './shared/components/modal/modal.component';
+import { ModalComponent } from './pages/admin/users/users-modal/modal.component';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -28,7 +28,7 @@ import { ModalComponent } from './shared/components/modal/modal.component';
     HttpClientModule,
     ReactiveFormsModule,
   ],
-  
+
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AdminInterceptor, multi: true },
   ],

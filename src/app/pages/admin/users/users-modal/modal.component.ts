@@ -1,6 +1,8 @@
-import { UsersService } from '../../services/users.service';
-import { UserFormTemplate } from '../../utils/user-form-template';
-import { Component, Inject, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { UsersService } from '../users-service/users.service';
+import { UserFormTemplate } from '@shared/utils/user-form-template';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 enum Action {
@@ -13,8 +15,8 @@ enum Action {
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css'],
 })
-export class ModalComponent implements OnInit {
-
+export class ModalComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<any>();
   actionTODO = Action.CREATE;
   showPasswordField = true;
   hide = true;
@@ -35,22 +37,28 @@ export class ModalComponent implements OnInit {
       this.userForm.baseForm.updateValueAndValidity();
       this.patchFormData();
     }
+    this.userForm.baseForm.reset();
   }
 
   onSave() {
     const formValue = this.userForm.baseForm.value;
     if (this.actionTODO === Action.CREATE) {
-      this.usersService.create(formValue).subscribe((res) => {
-        console.log('new ->', res);
-      });
+      this.usersService
+        .create(formValue)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res) => {
+          console.log('new ->', res);
+        });
       this.userForm.baseForm.reset();
-
-     } else {
+    } else {
       //edit
       const userId = this.data?.user?._id;
-      this.usersService.update(userId, formValue).subscribe((res) => {
-        console.log('update ->', res);
-      });
+      this.usersService
+        .update(userId, formValue)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res) => {
+          console.log('update ->', res);
+        });
       this.userForm.baseForm.reset();
     }
   }
@@ -71,5 +79,10 @@ export class ModalComponent implements OnInit {
       position: this.data?.user?.position,
       role: this.data?.user?.role,
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
   }
 }

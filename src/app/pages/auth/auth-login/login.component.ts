@@ -1,8 +1,8 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '@shared/services/auth/auth.service';
-import { IMAGES_ROUTES } from '../../data/constants/routes/images.routes';
+import { AuthService } from '@app/pages/auth/auth-service/auth.service';
+import { IMAGES_ROUTES } from '../../../data/constants/routes/images.routes';
 import { Subject } from 'rxjs';
 import { UserFormTemplate } from '@app/shared/utils/user-form-template';
 

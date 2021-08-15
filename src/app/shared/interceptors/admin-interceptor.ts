@@ -1,4 +1,4 @@
-import { AuthService } from './../services/auth/auth.service';
+import { AuthService } from '../../pages/auth/auth-service/auth.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {

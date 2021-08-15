@@ -9,7 +9,7 @@ import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { IncidentComponent } from './incident.component';
 
 import { IncidentModalComponent } from './incident-modal/incident-modal.component'
-import { ModalComponent } from '@app/shared/components/modal/modal.component';
+import { ModalComponent } from '@app/pages/admin/users/users-modal/modal.component';
 
 @NgModule({
   declarations: [IncidentComponent, IncidentModalComponent, ModalComponent],
