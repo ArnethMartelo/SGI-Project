@@ -57,9 +57,6 @@ export class AuthService {
         this.logout();
       } else {
         this.user.next(user);
-        // this.loggedIn.next(true);
-        // this.role.next(user.role);
-        // this.userToken.next(user.token);
       }
     }
   }

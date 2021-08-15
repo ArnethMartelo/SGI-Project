@@ -1,5 +1,5 @@
-import { UsersService } from './../../services/users.service';
-import { UserFormTemplate } from './../../utils/user-form-template';
+import { UsersService } from '../../services/users.service';
+import { UserFormTemplate } from '../../utils/user-form-template';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -21,7 +21,7 @@ export class ModalComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public userForm: UserFormTemplate,
-    private userService: UsersService
+    private usersService: UsersService
   ) {}
 
   ngOnInit(): void {
@@ -41,13 +41,13 @@ export class ModalComponent implements OnInit {
 
     const formValue = this.userForm.baseForm.value;
     if (this.actionTODO === Action.CREATE) {
-      this.userService.create(formValue).subscribe((res) => {
+      this.usersService.create(formValue).subscribe((res) => {
         console.log('new', res);
       });
-    } else {
+     } else {
       //edit
       const userId = this.data?.user?._id;
-      this.userService.update(userId, formValue).subscribe((res) => {
+      this.usersService.update(userId, formValue).subscribe((res) => {
         console.log('update', res);
       });
     }

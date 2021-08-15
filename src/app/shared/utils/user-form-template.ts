@@ -20,6 +20,7 @@ export class UserFormTemplate {
     role: ['', [Validators.required]],
   });
 
+
   isValidField(field: string): boolean | any {
     return (
       (this.baseForm.get(field)?.touched || this.baseForm.get(field)?.dirty) &&

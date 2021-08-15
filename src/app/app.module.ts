@@ -17,7 +17,7 @@ import { AdminInterceptor } from '@shared/interceptors/admin-interceptor';
 import { ModalComponent } from './shared/components/modal/modal.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent, ModalComponent],
+  declarations: [AppComponent, HeaderComponent, FooterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -28,6 +28,7 @@ import { ModalComponent } from './shared/components/modal/modal.component';
     HttpClientModule,
     ReactiveFormsModule,
   ],
+  
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AdminInterceptor, multi: true },
   ],
