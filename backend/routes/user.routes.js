@@ -6,7 +6,7 @@ const auth = require("../middlewares/auth");
 router.get("/user", auth.verifyToken, auth.verifyAdmin, user.list);
 
 //Search user
-router.get("/user/:id", auth.verifyToken, auth.verifyAdmin, user.search);
+router.get("/user/:id", auth.verifyToken, user.search);
 
 //Create user
 router.post("/user", auth.verifyToken, auth.verifyAdmin, user.create);

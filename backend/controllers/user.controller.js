@@ -16,10 +16,7 @@ exports.list = async (req, res) => {
     const conditions = {
       status: true,
     };
-
     const users = await User.find(conditions, User).skip(from).limit(limit);
-
-    //const sumUsers = await User.countDocuments(conditions);
     res.status(200).json(users);
   } catch (e) {
     console.log(e.message);
@@ -30,8 +27,8 @@ exports.list = async (req, res) => {
 //Search user
 exports.search = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    // console.log(user)
+    const user = await User.findOne({ idNumber: req.params.id });
+    //console.log(user);
     res.status(200).send(user);
   } catch (e) {
     console.log(e.message);
@@ -77,7 +74,6 @@ exports.create = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
-
 
     await user.save();
 
@@ -147,7 +143,7 @@ exports.delete = async (req, res) => {
         message: "User not found",
       });
     }
-    res.status(200).json({ userBD });
+    res.status(200).json({ message: "User deleted" });
   } catch (e) {
     console.log(e.message);
     res.status(400).send("Error deleting user");

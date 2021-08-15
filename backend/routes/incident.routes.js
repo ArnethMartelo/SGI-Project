@@ -4,7 +4,7 @@ const incident = require("../controllers/incident.controller");
 const auth = require("../middlewares/auth")
 
 //Get all incidents
-router.get("/incident", /*auth.verifyToken,*/ incident.list);
+router.get("/incident", auth.verifyToken, incident.list);
 
 //Search incident
 router.get("/incident/:id", auth.verifyToken, incident.search);

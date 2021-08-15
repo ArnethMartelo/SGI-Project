@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserI, UserResponseI, Roles } from '@models/user.interface';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 const helper = new JwtHelperService();
@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   private saveStorage(user: UserResponseI): void {
-    const { userId, message, ...rest } = user;
+    const { message, ...rest } = user;
     localStorage.setItem('user', JSON.stringify(rest));
   }
 

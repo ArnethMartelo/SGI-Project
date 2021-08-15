@@ -8,7 +8,7 @@ export interface IncidentI {
   time: string;
   type: string;
   description: string;
-  deadly: boolean;
+  deadly: string;
   victim: ObjectId;
   informer: ObjectId;
 }

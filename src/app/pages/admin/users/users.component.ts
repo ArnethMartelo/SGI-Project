@@ -21,6 +21,7 @@ import { UserFormTemplate } from '@app/shared/utils/user-form-template';
   styleUrls: ['./users.component.css'],
 })
 export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
+
   displayedColumns: string[] = [
     'idNumber',
     'idType',
@@ -31,7 +32,6 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     'email',
     'role',
     'position',
-    'status',
     'actions',
   ];
   dataSource = new MatTableDataSource();
@@ -51,9 +51,12 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.usersService.list().subscribe((users) => {
-      this.dataSource.data = users;
-    });
+    this.usersService
+      .list()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((users) => {
+        this.dataSource.data = users;
+      });
   }
 
   ngAfterViewInit() {
@@ -67,17 +70,17 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
         .delete(userId)
         .pipe(takeUntil(this.destroy$))
         .subscribe((res) => {
-          window.alert('Usuario Eliminado');
+          console.log(res);
+          window.alert(res.value);
         });
     }
   }
 
   openDialog(user = {}): void {
-    this.userForm.baseForm.reset();
     this.dialog.open(ModalComponent, {
-      width: '40vw',
+      width: '60vw',
       height: '90vh',
-      hasBackdrop: false,
+      // hasBackdrop: false,
       data: { title: 'Nuevo Usuario', icon: 'person_add_alt', user },
     });
   }

@@ -70,15 +70,9 @@
         <td mat-cell *matCellDef="let element">{{ element.position }}</td>
       </ng-container>
 
-      <!-- status Column -->
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-        <td mat-cell *matCellDef="let element">{{ element.status }}</td>
-      </ng-container>
-
       <!-- actions Column -->
       <ng-container matColumnDef="actions">
-        <th class="x" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
         <td mat-cell *matCellDef="let element">
           <div class="table-button-row">
             <button (click)="openDialog(element)" mat-stroked-button color="primary">
@@ -95,7 +89,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <mat-paginator
-      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageSizeOptions]="[10, 25, 50, 100]"
       aria-label="Select page of users"
     ></mat-paginator>
     <button (click)="openDialog()" class="add" mat-fab color="primary">

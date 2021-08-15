@@ -20,6 +20,7 @@ import { IncidentModalComponent } from './incident-modal/incident-modal.componen
   styleUrls: ['./incident.component.css'],
 })
 export class IncidentComponent implements OnInit, AfterViewInit, OnDestroy {
+
   displayedColumns: string[] = [
     'serial',
     'date',
@@ -49,6 +50,8 @@ export class IncidentComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.incidentService.list().subscribe((incidents) => {
       this.dataSource.data = incidents;
+      // console.log(incidents);
+
     });
   }
 
@@ -70,9 +73,8 @@ export class IncidentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openDialog(incident = {}): void {
     this.dialog.open(IncidentModalComponent, {
-      width: '40vw',
+      width: '60vw',
       height: '90vh',
-      hasBackdrop: false,
       data: { title: 'Nuevo Incidente', icon: 'add_task', incident },
     });
   }

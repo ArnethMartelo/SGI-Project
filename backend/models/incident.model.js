@@ -9,13 +9,14 @@ const incidentSchema = new Schema(
     date: { type: Date, required: true },
     site: { type: String, required: true },
     type: { type: String, required: true },
-    deadly: { type: Boolean, required: true },
+    deadly: { type: String, required: true },
     description: { type: String },
-    victim: { type: Schema.ObjectId, ref: employee },
-    informer: { type: Schema.ObjectId, ref: employee },
+    victim_id: { type: Schema.ObjectId, ref: employee },
+    informer_id: { type: Schema.ObjectId, ref: employee },
     employer: { type: Schema.ObjectId, ref: employer },
   },
   {
+    versionKey: false,
     timeStamps: true,
   }
 );

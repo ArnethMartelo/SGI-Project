@@ -8,6 +8,7 @@ exports.create = async (req, res) => {
     await incident.save();
     res.status(201).json({
       message: "Incident created!",
+      incident: incident,
     });
   } catch (e) {
     console.log(e.message);
@@ -21,12 +22,9 @@ exports.create = async (req, res) => {
 exports.list = async (req, res) => {
   try {
     const incidents = await Incident.find()
-      .populate("victim")
-      .populate("informer");
-    res.status(200).json({
-      message: "Incidents listed correctly!",
-      incidents,
-    });
+      .populate("victim_id")
+      .populate("informer_id");
+    res.status(200).json(incidents);
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Error listing incidents" });
@@ -60,12 +58,13 @@ exports.update = async (req, res) => {
       "type",
       "deadly",
       "description",
-      "victim",
-      "informer",
+      "victim_id",
+      "informer_id",
     ]);
     const incidentBD = await Incident.findByIdAndUpdate(id, incident, {
       new: true,
       runValidators: true,
+      context: "query",
     });
     res.status(200).json({
       message: "Incident Updated!",
