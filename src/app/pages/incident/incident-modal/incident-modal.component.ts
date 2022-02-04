@@ -130,7 +130,7 @@ export class IncidentModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  private addSerial(): void {
+  private addSerial(): void {   //obtener numero consecutivo de incidente
     this.incidentService
       .list()
       .pipe(takeUntil(this.destroy$))
